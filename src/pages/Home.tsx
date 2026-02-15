@@ -3,12 +3,13 @@ import homebg from "../assets/images/homebg.png";
 export function Home() {
   return (
     <>
-      <main>
+      <main className="">
         <div
           style={{ backgroundImage: `url(${homebg})` }}
-          className="h-screen  bg-no-repeat"
-        ></div>
-        {/* <img src={homebg} alt="背景圖片" className="" /> */}
+          className="h-224  bg-no-repeat  bg-top text-center"
+        >
+          {/* <p>3333</p> */}
+        </div>
       </main>
     </>
   );
