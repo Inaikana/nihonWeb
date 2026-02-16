@@ -1,5 +1,5 @@
 import logo from "../assets/images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 export function TopBar() {
   return (
@@ -9,12 +9,16 @@ export function TopBar() {
           <img src={logo} alt="栞" className="h-14" />
         </Link>
         <div className="flex gap-10 py-3 pr-10">
-          <Link
+          <NavLink
             to="/grammars"
-            className="cursor-pointer bg-sub px-5 py-1 rounded-xl"
+            className={({ isActive }) =>
+              isActive
+                ? "cursor-pointer bg-heavyPink font-bold px-5 py-1 rounded-xl"
+                : "cursor-pointer bg-sub px-5 py-1 rounded-xl"
+            }
           >
             文法
-          </Link>
+          </NavLink>
           <Link
             to="/words"
             className="cursor-pointer  bg-sub px-5 py-1 rounded-xl"
