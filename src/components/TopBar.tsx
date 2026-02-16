@@ -1,31 +1,32 @@
 import logo from "../assets/images/logo.png";
+import { Link } from "react-router-dom";
 
 export function TopBar() {
   return (
     <>
       <header className=" bg-main z-10 w-full flex justify-between  ">
-        <a href="#">
+        <Link to="/">
           <img src={logo} alt="栞" className="h-14" />
-        </a>
+        </Link>
         <div className="flex gap-10 py-3 pr-10">
-          <button
+          <Link
+            to="/grammars"
             className="cursor-pointer bg-sub px-5 py-1 rounded-xl"
-            type="button"
           >
             文法
-          </button>
-          <button
+          </Link>
+          <Link
+            to="/words"
             className="cursor-pointer  bg-sub px-5 py-1 rounded-xl"
-            type="button"
           >
             單字
-          </button>
-          <button
+          </Link>
+          <Link
+            to="/verbrule"
             className="cursor-pointer  bg-sub px-5 py-1 rounded-xl"
-            type="button"
           >
             動詞變化
-          </button>
+          </Link>
         </div>
       </header>
     </>
