@@ -6,7 +6,7 @@ import { FaStar } from "react-icons/fa";
 export function Home() {
   return (
     <>
-      <main className="flex">
+      <div className="flex">
         <div className=" w-1/2">
           <img src={homebg} alt="首頁banner" />
         </div>
@@ -39,7 +39,7 @@ export function Home() {
             <h2 className="ml-8">動詞</h2>
           </button>
         </div>
-      </main>
+      </div>
     </>
   );
 }
