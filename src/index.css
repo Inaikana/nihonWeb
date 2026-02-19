@@ -16,3 +16,15 @@ body {
 a:focus {
   outline: none;
 }
+
+input {
+  /* 1. 移除 Tab 選中的黑框 */
+  outline: none;
+
+  /* 2. 移除 iOS 行動裝置點擊時出現的灰色半透明高亮 */
+  -webkit-tap-highlight-color: transparent;
+
+  /* 3. 移除內部的預設陰影（特別是某些舊版瀏覽器） */
+  appearance: none;
+  -webkit-appearance: none;
+}
