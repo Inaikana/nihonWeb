@@ -8,7 +8,7 @@ const buttonCss = ({ isActive }: { isActive: boolean }) => {
 export function TopBar() {
   return (
     <>
-      <header className=" bg-main z-10 w-full flex justify-between  ">
+      <header className=" bg-main z-10 w-full flex justify-between sticky ">
         <Link to="/">
           <img src={logo} alt="栞" className="h-14" />
         </Link>
