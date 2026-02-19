@@ -1,5 +1,6 @@
 import { MainLayout } from "../layouts/MainLayout";
 import { FaYoutube } from "react-icons/fa";
+import { grammarsData } from "../FakeData/fakedata";
 
 export function Grammars() {
   return (
@@ -80,6 +81,24 @@ export function Grammars() {
           type="search"
           placeholder="請搜尋文法 ( 例如 : ください　)"
         />
+        {/* 【 3 】 篩選區 */}
+
+        {/* 【 4 】 文法區 */}
+        <div className="flex flex-col gap-4 mt-8">
+          {grammarsData.map((grammar) => (
+            <div
+              key={grammar.jid}
+              className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
+            >
+              <h2 className="text-2xl font-bold text-main">
+                {grammar.grammarPattern}
+              </h2>
+              <p className="text-lg text-gray-600 mt-2">
+                {grammar.chineseMeaning}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </MainLayout>
   );
