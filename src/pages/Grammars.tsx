@@ -3,45 +3,72 @@ import { FaYoutube } from "react-icons/fa";
 
 export function Grammars() {
   return (
-    <MainLayout className="flex justify-center w-full">
-      <div className="bg-main inline-block mt-8 px-12 py-8 rounded-2xl">
-        <div className="text-center text-[40px] font-bold tracking-wider">
-          聲明
+    <MainLayout className="flex justify-center w-full bg-slightWhile">
+      {/* 【 1 】聲明  */}
+      <div className="bg-white border-t-4 border-main inline-block mt-8 px-12 py-8 rounded-2xl shadow-[0_4px_20px_-3px_rgb(184,231,255,0.7)]">
+        {/* 聲明 */}
+        <div className="text-black text-center text-[40px] font-[1000] tracking-wider ">
+          <p>聲明</p>
+          <div className="bg-main w-18 h-1.5 mx-auto rounded-full -mt-1"></div>
         </div>
 
-        <div className="text-[20px] mt-4">
-          <p>本網站之日文文法內容參考自Yuka先生的Youtube教學影片</p>
-          <p>感謝Yuka先生無私的優質教學</p>
-        </div>
-
-        <div className="text-[20px] mt-4">
+        {/* 中文 */}
+        <div className="text-[20px] mt-6">
           <p>
-            当サイトの日本語文法内容は、Yuka先生のYouTubeチャンネルの解説動画を参考にさせていただいております
+            本網站之日文文法內容參考自
+            <a
+              className="font-bold border-b-2 border-main"
+              href="https://www.youtube.com/playlist?list=PLN-ztDeY62dAE8yGu0AeZ6S_7-7HBdaIu"
+              target="_blank"
+            >
+              Yuka先生的Youtube教學影片
+            </a>
+            ，感謝Yuka先生無私的優質教學
+          </p>
+        </div>
+
+        {/* 日文 */}
+        <div className="text-[20px] mt-12">
+          <p>
+            当サイトの日本語文法内容は、
+            <a
+              className="font-bold border-b-2 border-main"
+              href="https://www.youtube.com/playlist?list=PLN-ztDeY62dAE8yGu0AeZ6S_7-7HBdaIu"
+              target="_blank"
+            >
+              Yuka先生のYouTubeチャンネル
+            </a>
+            の解説動画を参考にさせていただいております
           </p>
           <p>
             Yuka先生の素晴らしいご指導と、惜しみない知識の共有に心より感謝申し上げます
           </p>
         </div>
 
-        <div className="text-[20px]  mt-4">
-          <p>參考連結 :</p>
-          <div className="flex items-center ">
-            <FaYoutube className="mr-2 " />
+        {/* 參考連結 */}
+        <div className="mt-8">
+          <p className="text-[#757575] mb-4">參考連結</p>
+          <div className="flex gap-8 mb-4">
             <a
               href="https://www.youtube.com/@yuka_japaneseteacher"
               target="_blank"
+              className="flex items-center text-[24px] bg-[#eaf8ff] w-1/2 p-4 rounded-lg"
             >
-              Yuka先生
+              <div className="bg-youtubeRed p-2 rounded-lg mr-4">
+                <FaYoutube className="text-white" />
+              </div>
+              <p>Yuka先生</p>
             </a>
-          </div>
 
-          <div className="flex items-center ">
-            <FaYoutube className="mr-2 " />
             <a
               href="https://www.youtube.com/playlist?list=PLN-ztDeY62dAE8yGu0AeZ6S_7-7HBdaIu"
               target="_blank"
+              className="flex items-center text-[24px] bg-[#eaf8ff] w-1/2 p-4 rounded-lg"
             >
-              初級文法 Basic Grammar
+              <div className="bg-youtubeRed p-2 rounded-lg mr-4">
+                <FaYoutube className="text-white" />
+              </div>
+              <p>初級文法 Basic Grammar</p>
             </a>
           </div>
         </div>

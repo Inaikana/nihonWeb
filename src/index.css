@@ -5,8 +5,14 @@
   --color-sub: #ffb8f4;
   --color-heavyBlue: #6bbbe4;
   --color-heavyPink: #ff71e9;
+  --color-slightWhile: #f8fafc;
+  --color-youtubeRed: #ff0033;
 }
 
 body {
   color: #333333;
+}
+
+a:focus {
+  outline: none;
 }

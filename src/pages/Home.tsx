@@ -7,7 +7,7 @@ import { MainLayout } from "../layouts/MainLayout";
 
 export function Home() {
   return (
-    <MainLayout className="flex">
+    <MainLayout className="flex  bg-slightWhile">
       {/* 【 1 】左圖 */}
       <div className=" w-1/2">
         <img src={homebg} alt="首頁banner" />
