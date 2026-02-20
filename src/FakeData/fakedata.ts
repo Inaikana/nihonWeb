@@ -24,9 +24,9 @@ export const grammarsData: GrammarRule[] = [
     jid: "1_1", // 自製id 第幾集的第幾個 例:第1集第1個
     episodeNumber: "1", // 集數
     grammarPattern: "( 名詞A )は( 名詞B )です ", // 日文文法公式
-    grammarSummary: "", // 日文文法(簡式)
+    grammarSummary: "は", // 日文文法(簡式)
     chineseMeaning: "A是B", // 中文
-    chineseSummary: "", // 中文(簡式)
+    chineseSummary: "是", // 中文(簡式)
     note1: "です結尾表示禮貌的用法", // 備註1
     note2: "", // 備註2
     note3: "", // 備註3
@@ -44,9 +44,9 @@ export const grammarsData: GrammarRule[] = [
     jid: "1_2", // 自製id
     episodeNumber: "1", // 集數
     grammarPattern: "( 名詞A )は( 名詞B ) + ではありません/じゃありません ", // 日文文法公式
-    grammarSummary: "", // 日文文法(簡式)
+    grammarSummary: "ではありません / じゃありません", // 日文文法(簡式)
     chineseMeaning: "A不是B", // 中文
-    chineseSummary: "", // 中文(簡式)
+    chineseSummary: "不是", // 中文(簡式)
     note1: "", // 備註1
     note2: "", // 備註2
     note3: "", // 備註3

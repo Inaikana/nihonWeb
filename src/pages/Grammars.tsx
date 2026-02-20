@@ -54,7 +54,7 @@ export function Grammars() {
               <a
                 href="https://www.youtube.com/@yuka_japaneseteacher"
                 target="_blank"
-                className="flex items-center text-[24px] bg-[#eaf8ff] w-1/2 p-4 rounded-lg"
+                className="flex items-center text-[24px] bg-softBlue w-1/2 p-4 rounded-lg"
               >
                 <div className="bg-youtubeRed p-2 rounded-lg mr-4">
                   <FaYoutube className="text-white" />
@@ -65,7 +65,7 @@ export function Grammars() {
               <a
                 href="https://www.youtube.com/playlist?list=PLN-ztDeY62dAE8yGu0AeZ6S_7-7HBdaIu"
                 target="_blank"
-                className="flex items-center text-[24px] bg-[#eaf8ff] w-1/2 p-4 rounded-lg"
+                className="flex items-center text-[24px] bg-softBlue w-1/2 p-4 rounded-lg"
               >
                 <div className="bg-youtubeRed p-2 rounded-lg mr-4">
                   <FaYoutube className="text-white" />
@@ -82,6 +82,7 @@ export function Grammars() {
           placeholder="請搜尋文法 ( 例如 : ください　)"
         />
         {/* 【 3 】 篩選區 */}
+        {/* 篩選類別: 集數 因為 假設 動詞變化    */}
 
         {/* 【 4 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8">
@@ -90,11 +91,11 @@ export function Grammars() {
               key={grammar.jid}
               className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
             >
-              <h2 className="text-2xl font-bold text-main">
-                {grammar.grammarPattern}
+              <h2 className="text-2xl font-bold bg-softBlue px-4 py-3 rounded-lg">
+                {grammar.grammarSummary}
               </h2>
-              <p className="text-lg text-gray-600 mt-2">
-                {grammar.chineseMeaning}
+              <p className="text-lg text-[#757575] mt-2 px-4">
+                {grammar.chineseSummary}
               </p>
             </div>
           ))}
