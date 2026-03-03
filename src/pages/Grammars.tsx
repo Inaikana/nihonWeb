@@ -1,6 +1,7 @@
 import { MainLayout } from "../layouts/MainLayout";
 import { FaYoutube } from "react-icons/fa";
 import { grammarsData } from "../FakeData/fakedata";
+import { EpisodesMenu } from "../components/EpisodesMenu";
 
 export function Grammars() {
   return (
@@ -108,6 +109,7 @@ export function Grammars() {
             假設
           </button>
         </div>
+        <EpisodesMenu />
 
         {/* 【 4 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8">
