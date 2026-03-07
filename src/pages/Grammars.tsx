@@ -82,34 +82,37 @@ export function Grammars() {
           type="search"
           placeholder="請搜尋文法 ( 例如 : ください　)"
         />
-        {/* 【 3 】 篩選區 */}
-        <div className=" mt-3 text-[20px]">
-          <button
-            className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer hover:bg-main hover:font-bold"
-            type="button"
-          >
-            動詞
-          </button>
-          <button
-            className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
-            type="button"
-          >
-            形容詞
-          </button>
-          <button
-            className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
-            type="button"
-          >
-            因為
-          </button>
-          <button
-            className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
-            type="button"
-          >
-            假設
-          </button>
+        {/* 【 3 】 篩選 + 集數 */}
+
+        <div className="flex justify-between mt-4">
+          <div className="text-[20px]">
+            <button
+              className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer hover:bg-main hover:font-bold"
+              type="button"
+            >
+              動詞
+            </button>
+            <button
+              className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
+              type="button"
+            >
+              形容詞
+            </button>
+            <button
+              className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
+              type="button"
+            >
+              因為
+            </button>
+            <button
+              className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
+              type="button"
+            >
+              假設
+            </button>
+          </div>
+          <EpisodesMenu />
         </div>
-        <EpisodesMenu />
 
         {/* 【 4 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8">
