@@ -16,10 +16,10 @@ export interface GrammarRule {
   grammarSummary: string;
   chineseMeaning: string;
   chineseSummary: string;
-  note: string[];
-  example: ExampleRule[];
+  notes: string[];
+  examples: ExampleRule[];
   referenceUrl: string;
-  quiz: QuizRule[];
+  quizs: QuizRule[];
 }
 
 export const grammarsData: GrammarRule[] = [
@@ -30,10 +30,12 @@ export const grammarsData: GrammarRule[] = [
     grammarSummary: "は", // 日文文法(簡式)
     chineseMeaning: "A是B", // 中文
     chineseSummary: "是", // 中文(簡式)
-    note: ["です結尾表示禮貌的用法"],
-    example: [{ japanese: "高橋さんは日本人です", chinese: "" }],
+    notes: ["です結尾表示禮貌的用法"],
+    examples: [
+      { japanese: "高橋[たかはし]さんは日本人[にほんじん]です", chinese: "" },
+    ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
-    quiz: [{ question: "", options: [], answer: "" }],
+    quizs: [{ question: "", options: [], answer: "" }],
   },
   {
     jid: "0102", // 自製id
@@ -42,9 +44,14 @@ export const grammarsData: GrammarRule[] = [
     grammarSummary: "ではありません / じゃありません", // 日文文法(簡式)
     chineseMeaning: "A不是B", // 中文
     chineseSummary: "不是", // 中文(簡式)
-    note: [],
-    example: [{ japanese: "田中さんは台湾人じゃありません", chinese: "" }],
+    notes: [],
+    examples: [
+      {
+        japanese: "田中[たなか]さんは台湾人[たいわんじん]じゃありません",
+        chinese: "",
+      },
+    ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
-    quiz: [{ question: "", options: [], answer: "" }],
+    quizs: [{ question: "", options: [], answer: "" }],
   },
 ];
