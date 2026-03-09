@@ -2,6 +2,7 @@ import { MainLayout } from "../layouts/MainLayout";
 import { FaYoutube } from "react-icons/fa";
 import { grammarsData } from "../FakeData/fakedata";
 import { EpisodesMenu } from "../components/EpisodesMenu";
+import { Link } from "react-router-dom";
 
 export function Grammars() {
   return (
@@ -117,7 +118,8 @@ export function Grammars() {
         {/* 【 4 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8">
           {grammarsData.map((grammar) => (
-            <div
+            <Link
+              to="/grammar"
               key={grammar.jid}
               className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
             >
@@ -127,7 +129,7 @@ export function Grammars() {
               <p className="text-lg text-[#757575] mt-2 px-4">
                 {grammar.chineseSummary}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
