@@ -46,3 +46,13 @@ select:focus {
   outline: none;
   box-shadow: none;
 }
+
+ruby {
+  ruby-align: center; /* 讓讀音置中 */
+}
+
+rt {
+  font-size: 0.6em; /* 讀音通常為本體字大小的 60% */
+  color: #666666; /* 稍微淡一點的顏色增加閱讀舒適度 */
+  /* user-select: none;  防止使用者複製時選取到讀音，方便只複製日文句子 */
+}

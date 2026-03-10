@@ -32,7 +32,10 @@ export const grammarsData: GrammarRule[] = [
     chineseSummary: "是", // 中文(簡式)
     notes: ["です結尾表示禮貌的用法"],
     examples: [
-      { japanese: "高橋[たかはし]さんは日本人[にほんじん]です", chinese: "" },
+      {
+        japanese: "|高橋[たかはし]さんは|日本人[にほんじん]です",
+        chinese: "",
+      },
     ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
     quizs: [{ question: "", options: [], answer: "" }],
@@ -47,7 +50,7 @@ export const grammarsData: GrammarRule[] = [
     notes: [],
     examples: [
       {
-        japanese: "田中[たなか]さんは台湾人[たいわんじん]じゃありません",
+        japanese: "|田中[たなか]さんは|台湾人[たいわんじん]じゃありません",
         chinese: "",
       },
     ],
