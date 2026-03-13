@@ -4,6 +4,7 @@ import { Hiragana } from "../components/Hiragana";
 import { FaPencilAlt } from "react-icons/fa";
 import { LuNotebookText } from "react-icons/lu";
 import { FaRegFlag } from "react-icons/fa6";
+import { FaYoutube } from "react-icons/fa";
 
 const id = "0101"; // 篩選集數 這邊先寫定
 const filteredGrammar = grammarsData.filter((grammar) => {
@@ -66,18 +67,27 @@ export function Grammar() {
         {/* 【 5 】 參考影片 */}
         <div className="mt-10">
           <h3 className="flex items-center text-[16px]">
-            <FaRegFlag />
+            <FaYoutube />
             <p className="ml-2">參考影片</p>
           </h3>
 
-          <a
-            className="bg-sub flex"
-            href={grammarData.referenceUrl}
-            target="_blank"
-          >
-            <img src={grammarData.thumbnail} alt="YT縮圖" />
-            <p>{grammarData.videoTitle}</p>
-          </a>
+          <div className="flex  mt-2">
+            <a href={grammarData.referenceUrl} target="_blank">
+              <img
+                className="w-50"
+                src={grammarData.thumbnail}
+                alt="Youtube縮圖"
+              />
+            </a>
+
+            <a
+              className="mx-4 h-full text-[20px] hover:font-bold hover:text-heavyPink"
+              href={grammarData.referenceUrl}
+              target="_blank"
+            >
+              {grammarData.videoTitle}
+            </a>
+          </div>
         </div>
       </div>
     </MainLayout>
