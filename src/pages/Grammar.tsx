@@ -16,10 +16,14 @@ export function Grammar() {
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
       <div className="w-[60%] bg-white shadow-md  px-12">
-        {/* 【 1 】 集數 */}
-        <p className="bg-main text-[20px] mt-6 px-2 py-1 rounded-md inline-block">
+        {/* 【 1 】 集數 + 順序 */}
+        <p className="bg-main text-[20px] mt-6 px-3 py-1 rounded-xl inline-block">
           第{grammarData.episodeNumber}集
         </p>
+
+        <div className="text-[20px]  inline-block ml-2">
+          {grammarData.order}
+        </div>
 
         {/* 【 2 】 文法公式 */}
 
@@ -71,7 +75,7 @@ export function Grammar() {
             <p className="ml-2">參考影片</p>
           </h3>
 
-          <div className="flex  mt-2">
+          <div className="flex mt-2 mb-20">
             <a href={grammarData.referenceUrl} target="_blank">
               <img
                 className="w-50"

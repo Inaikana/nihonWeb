@@ -12,6 +12,8 @@ export interface QuizRule {
 export interface GrammarRule {
   jid: string;
   episodeNumber: string;
+  order: string;
+  timestamp: number;
   grammarPattern: string;
   grammarSummary: string;
   chineseMeaning: string;
@@ -28,18 +30,20 @@ export const grammarsData: GrammarRule[] = [
   {
     jid: "0101", // 自製id 第幾集的第幾個 例:第1集第1個
     episodeNumber: "1", // 集數
+    order: "01", // 第幾個
+    timestamp: 15, // 影片時間(秒)
     grammarPattern: "( 名詞A ) は ( 名詞B ) です ", // 日文文法公式
     grammarSummary: "は", // 日文文法(簡式)
     chineseMeaning: "A是B", // 中文
     chineseSummary: "是", // 中文(簡式)
-    notes: ["です結尾表示禮貌的用法"],
+    notes: ["です結尾表示禮貌的用法"], // 備註
     examples: [
       {
         japanese: "|高橋[たかはし]さんは|日本人[にほんじん]です",
         chinese: "",
-      },
+      }, // 例句
     ],
-    referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
+    referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs&t=15s", // 網址
     thumbnail: "https://img.youtube.com/vi/3M1UOCKgVhs/mqdefault.jpg", // 縮圖 路由 +【 /mqdefault.jpg 】
     videoTitle:
       "日文教學_初級日語#1 ｜日語語法解釋 ～は～です、～は～ではありません／じゃありません、～は～ですか、～の～", // 影片標題
@@ -48,6 +52,8 @@ export const grammarsData: GrammarRule[] = [
   {
     jid: "0102", // 自製id
     episodeNumber: "1", // 集數
+    order: "02",
+    timestamp: 103,
     grammarPattern: "( 名詞A ) は ( 名詞B ) + ではありません/じゃありません ", // 日文文法公式
     grammarSummary: "ではありません / じゃありません", // 日文文法(簡式)
     chineseMeaning: "A不是B", // 中文
