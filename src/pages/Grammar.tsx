@@ -69,6 +69,15 @@ export function Grammar() {
             <FaRegFlag />
             <p className="ml-2">參考影片</p>
           </h3>
+
+          <a
+            className="bg-sub flex"
+            href={grammarData.referenceUrl}
+            target="_blank"
+          >
+            <img src={grammarData.thumbnail} alt="YT縮圖" />
+            <p>{grammarData.videoTitle}</p>
+          </a>
         </div>
       </div>
     </MainLayout>

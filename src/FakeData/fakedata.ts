@@ -19,6 +19,8 @@ export interface GrammarRule {
   notes: string[];
   examples: ExampleRule[];
   referenceUrl: string;
+  thumbnail: string;
+  videoTitle: string;
   quizs: QuizRule[];
 }
 
@@ -38,6 +40,9 @@ export const grammarsData: GrammarRule[] = [
       },
     ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
+    thumbnail: "https://img.youtube.com/vi/3M1UOCKgVhs/mqdefault.jpg", // 縮圖 路由 +【 /mqdefault.jpg 】
+    videoTitle:
+      "日文教學_初級日語#1 ｜日語語法解釋 ～は～です、～は～ではありません／じゃありません、～は～ですか、～の～", // 影片標題
     quizs: [{ question: "", options: [], answer: "" }],
   },
   {
@@ -55,6 +60,8 @@ export const grammarsData: GrammarRule[] = [
       },
     ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs", // 網址
+    thumbnail: "",
+    videoTitle: "",
     quizs: [{ question: "", options: [], answer: "" }],
   },
 ];
