@@ -41,7 +41,7 @@ export const grammarsData: GrammarRule[] = [
       {
         japanese: "|高橋[たかはし]さんは|日本人[にほんじん]です",
         chinese: "",
-      }, // 例句
+      },
     ],
     referenceUrl: "https://www.youtube.com/watch?v=3M1UOCKgVhs&t=15s", // 網址
     thumbnail: "https://img.youtube.com/vi/3M1UOCKgVhs/mqdefault.jpg", // 縮圖 路由 +【 /mqdefault.jpg 】

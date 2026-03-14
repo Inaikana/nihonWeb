@@ -1,10 +1,15 @@
 import { MainLayout } from "../layouts/MainLayout";
 import { FaYoutube } from "react-icons/fa";
-import { grammarsData } from "../FakeData/fakedata";
 import { EpisodesMenu } from "../components/EpisodesMenu";
 import { Link } from "react-router-dom";
+import { useGetGrammars } from "../hooks/useGetGrammars";
 
 export function Grammars() {
+  const { data } = useGetGrammars();
+
+  // 若 data 不存在，直接回傳一個空陣列，避免 map 報錯
+  const grammarsData = data ?? [];
+
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
       <div className="w-[60%] ">
