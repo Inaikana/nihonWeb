@@ -121,10 +121,10 @@ export function Grammars() {
         </div>
 
         {/* 【 4 】 文法區 */}
-        <div className="flex flex-col gap-4 mt-8">
+        <div className="flex flex-col gap-4 mt-8 mb-20">
           {grammarsData.map((grammar) => (
             <Link
-              to="/grammar"
+              to={`/grammar/${grammar.jid}`}
               key={grammar.jid}
               className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
             >

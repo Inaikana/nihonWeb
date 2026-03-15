@@ -18,7 +18,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/grammars" element={<Grammars />} />
-          <Route path="/grammar" element={<Grammar />} />
+          <Route path="/grammar/:jid" element={<Grammar />} />
           <Route path="/words" element={<Words />} />
           <Route path="/verbrule" element={<VerbRule />} />
           <Route path="*" element={<Navigate to="/" replace />} />

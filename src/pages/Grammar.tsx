@@ -1,18 +1,31 @@
 import { MainLayout } from "../layouts/MainLayout";
-import { grammarsData } from "../FakeData/fakedata";
 import { Hiragana } from "../components/Hiragana";
 import { FaPencilAlt } from "react-icons/fa";
 import { LuNotebookText } from "react-icons/lu";
 import { FaRegFlag } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
-
-const id = "0101"; // 篩選集數 這邊先寫定
-const filteredGrammar = grammarsData.filter((grammar) => {
-  return grammar.jid == id;
-});
-const grammarData = filteredGrammar[0];
+import { useParams } from "react-router-dom";
+import { useGetGrammars } from "../hooks/useGetGrammars";
+import { useMemo } from "react";
 
 export function Grammar() {
+  const { data } = useGetGrammars();
+  const grammarsData = data ?? [];
+
+  const { jid } = useParams<{ jid: string }>();
+
+  const filteredGrammar = grammarsData.filter((grammar) => {
+    return grammar.jid == jid;
+  });
+  const grammarData = filteredGrammar[0];
+
+  // TODO
+  // 直接打網址抓不到資料問題
+
+  // const grammarData = useMemo(() => {
+  //   return grammarsData?.find((grammar) => grammar.jid === jid);
+  // }, [grammarsData, jid]);
+
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
       <div className="w-[60%] bg-white shadow-md  px-12">
@@ -40,17 +53,19 @@ export function Grammar() {
         </div>
 
         {/* 【 3 】 備註 */}
-        <div className="mt-10">
-          <h3 className="flex items-center text-[16px]">
-            <LuNotebookText />
-            <p className="ml-2">備註</p>
-          </h3>
-          <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
-            {grammarData.notes.map((note) => (
-              <div>{note}</div>
-            ))}
+        {grammarData.notes && grammarData.notes.length > 0 && (
+          <div className="mt-10">
+            <h3 className="flex items-center text-[16px]">
+              <LuNotebookText />
+              <p className="ml-2">備註</p>
+            </h3>
+            <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
+              {grammarData.notes.map((note) => (
+                <div>{note}</div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 【 4 】 例句 */}
         <div className="mt-10">

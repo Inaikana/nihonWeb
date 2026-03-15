@@ -69,5 +69,6 @@ export const grammarsData: GrammarRule[] = [
     thumbnail: "",
     videoTitle: "",
     quizs: [{ question: "", options: [], answer: "" }],
+    //  [{ "question": "", "options": [""], "answer": "" }]
   },
 ];
