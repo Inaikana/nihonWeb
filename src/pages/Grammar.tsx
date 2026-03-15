@@ -10,21 +10,25 @@ import { useMemo } from "react";
 
 export function Grammar() {
   const { data } = useGetGrammars();
-  const grammarsData = data ?? [];
-
   const { jid } = useParams<{ jid: string }>();
 
-  const filteredGrammar = grammarsData.filter((grammar) => {
-    return grammar.jid == jid;
-  });
-  const grammarData = filteredGrammar[0];
+  const grammarData = useMemo(() => {
+    return data?.find((grammar) => grammar.jid === jid);
+  }, [data, jid]);
 
-  // TODO
-  // 直接打網址抓不到資料問題
+  if (!data) {
+    return <div>讀取中...</div>;
+  }
 
-  // const grammarData = useMemo(() => {
-  //   return grammarsData?.find((grammar) => grammar.jid === jid);
-  // }, [grammarsData, jid]);
+  if (!grammarData) {
+    return <div>讀取失敗</div>;
+  }
+
+  // 若直接用路由到此頁面 useGetGrammars()尚未抓到資料之前
+  // grammarData 就會是 undefined 導致頁面錯誤
+  // 在這使用 useMemo 加 if 判斷防呆 來處理
+  // 雖然一開始一樣會全白 但隨著 useGetGrammars() 抓到資料
+  // useMemo的依賴陣列更新 重新渲染一次組件
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
