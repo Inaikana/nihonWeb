@@ -7,6 +7,7 @@ import { FaYoutube } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useGetGrammars } from "../hooks/useGetGrammars";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 export function Grammar() {
   const { data } = useGetGrammars();
@@ -30,87 +31,104 @@ export function Grammar() {
   // 雖然一開始一樣會全白 但隨著 useGetGrammars() 抓到資料
   // useMemo的依賴陣列更新 重新渲染一次組件
 
+  const grammars = useGetGrammars().data; // 用變數grammars取得API所有文法 (data上面用過了)
+  const grammarsData = grammars ?? [];
+
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
-      <div className="w-[60%] bg-white shadow-md  px-12">
-        {/* 【 1 】 集數 + 順序 */}
-        <p className="bg-main text-[20px] mt-6 px-3 py-1 rounded-xl inline-block">
-          第{grammarData.episodeNumber}集
-        </p>
+      <div className="w-[80%] flex shadow-md ">
+        {/* 【 左 】文法詳細頁 */}
+        <div className=" bg-white   px-12  ">
+          {/* 【 1 】 集數 + 順序 */}
+          <p className="bg-main text-[20px] mt-6 px-3 py-1 rounded-xl inline-block">
+            第{grammarData.episodeNumber}集
+          </p>
 
-        <div className="text-[20px]  inline-block ml-2">
-          {grammarData.order}
-        </div>
+          <div className="text-[20px]  inline-block ml-2">
+            {grammarData.order}
+          </div>
 
-        {/* 【 2 】 文法公式 */}
+          {/* 【 2 】 文法公式 */}
 
-        <div className="mt-8">
-          <h3 className="flex items-center text-[16px]">
-            <FaPencilAlt />
-            <p className="ml-2">公式</p>
-          </h3>
+          <div className="mt-8">
+            <h3 className="flex items-center text-[16px]">
+              <FaPencilAlt />
+              <p className="ml-2">公式</p>
+            </h3>
 
-          <h2 className="bg-softBlue mt-2 px-3 py-2 font-bold text-[24px] rounded-lg">
-            {grammarData.grammarPattern}
-          </h2>
-          <p className="text-[20px] mt-2">{grammarData.chineseMeaning}</p>
-        </div>
+            <h2 className="bg-softBlue mt-2 px-3 py-2 font-bold text-[24px] rounded-lg">
+              {grammarData.grammarPattern}
+            </h2>
+            <p className="text-[20px] mt-2">{grammarData.chineseMeaning}</p>
+          </div>
 
-        {/* 【 3 】 備註 */}
-        {grammarData.notes && grammarData.notes.length > 0 && (
+          {/* 【 3 】 備註 */}
+          {grammarData.notes && grammarData.notes.length > 0 && (
+            <div className="mt-10">
+              <h3 className="flex items-center text-[16px]">
+                <LuNotebookText />
+                <p className="ml-2">備註</p>
+              </h3>
+              <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
+                {grammarData.notes.map((note) => (
+                  <div>{note}</div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 【 4 】 例句 */}
           <div className="mt-10">
             <h3 className="flex items-center text-[16px]">
-              <LuNotebookText />
-              <p className="ml-2">備註</p>
+              <FaRegFlag />
+              <p className="ml-2">例句</p>
             </h3>
-            <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
-              {grammarData.notes.map((note) => (
-                <div>{note}</div>
+
+            <div className="mt-2 text-[20px]">
+              {grammarData.examples.map((example, index) => (
+                <p key={index}>
+                  <Hiragana text={example.japanese}></Hiragana>
+                </p>
               ))}
             </div>
           </div>
-        )}
 
-        {/* 【 4 】 例句 */}
-        <div className="mt-10">
-          <h3 className="flex items-center text-[16px]">
-            <FaRegFlag />
-            <p className="ml-2">例句</p>
-          </h3>
+          {/* 【 5 】 參考影片 */}
+          <div className="mt-10">
+            <h3 className="flex items-center text-[16px]">
+              <FaYoutube />
+              <p className="ml-2">參考影片</p>
+            </h3>
 
-          <div className="mt-2 text-[20px]">
-            {grammarData.examples.map((example, index) => (
-              <p key={index}>
-                <Hiragana text={example.japanese}></Hiragana>
-              </p>
-            ))}
+            <div className="flex mt-2 mb-20">
+              <a href={grammarData.referenceUrl} target="_blank">
+                <img
+                  className="w-50"
+                  src={grammarData.thumbnail}
+                  alt="Youtube縮圖"
+                />
+              </a>
+
+              <a
+                className="mx-4 h-full text-[20px] hover:font-bold hover:text-heavyPink"
+                href={grammarData.referenceUrl}
+                target="_blank"
+              >
+                {grammarData.videoTitle}
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* 【 5 】 參考影片 */}
-        <div className="mt-10">
-          <h3 className="flex items-center text-[16px]">
-            <FaYoutube />
-            <p className="ml-2">參考影片</p>
-          </h3>
-
-          <div className="flex mt-2 mb-20">
-            <a href={grammarData.referenceUrl} target="_blank">
-              <img
-                className="w-50"
-                src={grammarData.thumbnail}
-                alt="Youtube縮圖"
-              />
-            </a>
-
-            <a
-              className="mx-4 h-full text-[20px] hover:font-bold hover:text-heavyPink"
-              href={grammarData.referenceUrl}
-              target="_blank"
-            >
-              {grammarData.videoTitle}
-            </a>
-          </div>
+        {/* 【 右 】選單 */}
+        <div className="overflow-scroll h-200 bg-white  ">
+          {/* 【 6 】 其餘集數選單 */}
+          {grammarsData.map((grammar) => (
+            <Link to={`/grammar/${grammar.jid}`} key={grammar.jid} className="">
+              <p className="bg-softBlue text-[20px] px-4 py-2 m-4 rounded-xl">
+                {grammar.grammarSummary}
+              </p>
+            </Link>
+          ))}
         </div>
       </div>
     </MainLayout>
