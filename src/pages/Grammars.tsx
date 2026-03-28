@@ -3,6 +3,8 @@ import { FaYoutube } from "react-icons/fa";
 import { EpisodesMenu } from "../components/EpisodesMenu";
 import { Link } from "react-router-dom";
 import { useGetGrammars } from "../hooks/useGetGrammars";
+import { GoChevronLeft } from "react-icons/go";
+import { GoChevronRight } from "react-icons/go";
 
 export function Grammars() {
   const { data } = useGetGrammars();
@@ -120,7 +122,19 @@ export function Grammars() {
           <EpisodesMenu />
         </div>
 
-        {/* 【 4 】 文法區 */}
+        {/* 【 4 】 分頁  */}
+
+        <div className="mt-8 flex justify-center text-[20px]">
+          <div className="flex items-center justify-center w-1/2">
+            <GoChevronLeft className="text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink" />
+            <p>1</p>
+            <p className="mx-4">/</p>
+            <p>5</p>
+            <GoChevronRight className="text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink" />
+          </div>
+        </div>
+
+        {/* 【 5 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8 mb-20">
           {grammarsData.map((grammar) => (
             <Link
