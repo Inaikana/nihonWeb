@@ -36,7 +36,7 @@ export function Grammar() {
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
-      <div className="w-[80%] flex shadow-md ">
+      <div className="w-[70%] flex shadow-md ">
         {/* 【 左 】文法詳細頁 */}
         <div className=" bg-white   px-12  ">
           {/* 【 1 】 集數 + 順序 */}
@@ -120,15 +120,21 @@ export function Grammar() {
           </div>
         </div>
         {/* 【 右 】選單 */}
-        <div className="overflow-scroll h-200 bg-white  ">
+        <div className="overflow-scroll whitespace-nowrap w-100 h-200 bg-white  ">
           {/* 【 6 】 其餘集數選單 */}
-          {grammarsData.map((grammar) => (
-            <Link to={`/grammar/${grammar.jid}`} key={grammar.jid} className="">
-              <p className="bg-softBlue text-[20px] px-4 py-2 m-4 rounded-xl">
-                {grammar.grammarSummary}
-              </p>
-            </Link>
-          ))}
+          <div className="flex flex-col w-fit min-w-full">
+            {grammarsData.map((grammar) => (
+              <Link
+                to={`/grammar/${grammar.jid}`}
+                key={grammar.jid}
+                className=""
+              >
+                <p className="bg-softBlue text-[20px] px-4 py-2 my-1 rounded-xl">
+                  {grammar.grammarSummary}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </MainLayout>
