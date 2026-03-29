@@ -14,17 +14,17 @@ export function Grammars() {
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
-      <div className="w-[60%] ">
+      <div className="w-[90%] md:w-[80%]  lg:w-[60%] ">
         {/* 【 1 】聲明  */}
-        <div className="w-full bg-white border-t-4 border-main inline-block mt-15 px-12 py-8 rounded-2xl shadow-[0_4px_20px_-3px_rgb(184,231,255,0.7)]">
+        <div className="w-full bg-white border-t-4 border-main inline-block mt-15 px-4 md:px-12 lg:px-12 py-8 rounded-2xl shadow-[0_4px_20px_-3px_rgb(184,231,255,0.7)]">
           {/* 聲明 */}
-          <div className="text-black text-center text-[40px] font-[1000] tracking-wider ">
+          <div className="text-black text-center text-[24px] md:text-[40px] lg:text-[40px] font-[1000] tracking-wider ">
             <p>聲明</p>
             <div className="bg-main w-18 h-1.5 mx-auto rounded-full -mt-1"></div>
           </div>
 
           {/* 中文 */}
-          <div className="text-[20px] mt-6">
+          <div className="text-[16px] md:text-[20px] lg:text-[20px] mt-6">
             <p>
               本網站之日文文法內容參考自
               <a
@@ -39,7 +39,7 @@ export function Grammars() {
           </div>
 
           {/* 日文 */}
-          <div className="text-[20px] mt-12">
+          <div className="text-[16px] md:text-[20px] lg:text-[20px] mt-12">
             <p>
               当サイトの日本語文法内容は、
               <a
@@ -58,12 +58,14 @@ export function Grammars() {
 
           {/* 參考連結 */}
           <div className="mt-8">
-            <p className="text-[#757575] mb-4">參考連結</p>
-            <div className="flex gap-8 mb-4">
+            <p className="text-[#757575] mb-4 text-[12px] md:text-[16px] lg:text-[16px]">
+              參考連結
+            </p>
+            <div className="flex flex-col md:flex-row lg:flex-row gap-8 mb-4 ">
               <a
                 href="https://www.youtube.com/@yuka_japaneseteacher"
                 target="_blank"
-                className="flex items-center text-[24px] bg-softBlue w-1/2 p-4 rounded-lg"
+                className="flex items-center text-[20px] md:text-[24px] lg:text-[24px] bg-softBlue w-full md:w-1/2 lg:w-1/2 p-4 rounded-lg"
               >
                 <div className="bg-youtubeRed p-2 rounded-lg mr-4">
                   <FaYoutube className="text-white" />
@@ -74,7 +76,7 @@ export function Grammars() {
               <a
                 href="https://www.youtube.com/playlist?list=PLN-ztDeY62dAE8yGu0AeZ6S_7-7HBdaIu"
                 target="_blank"
-                className="flex items-center text-[24px] bg-softBlue w-1/2 p-4 rounded-lg"
+                className="flex items-center text-[20px] md:text-[24px] lg:text-[24px] bg-softBlue w-full md:w-1/2 lg:w-1/2 p-4 rounded-lg"
               >
                 <div className="bg-youtubeRed p-2 rounded-lg mr-4">
                   <FaYoutube className="text-white" />
@@ -86,7 +88,7 @@ export function Grammars() {
         </div>
         {/* 【 2 】搜尋框 */}
         <input
-          className="bg-white w-full text-[20px] border-2 border-main rounded-xl mt-12 p-4"
+          className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
           type="search"
           placeholder="請搜尋文法 ( 例如 : ください　)"
         />
@@ -125,7 +127,7 @@ export function Grammars() {
         {/* 【 4 】 分頁  */}
 
         <div className="mt-8 flex justify-center text-[20px]">
-          <div className="flex items-center justify-center w-1/2">
+          <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
             <GoChevronLeft className="text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink" />
             <p>1</p>
             <p className="mx-4">/</p>
@@ -142,10 +144,10 @@ export function Grammars() {
               key={grammar.jid}
               className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
             >
-              <h2 className="text-2xl font-bold bg-softBlue px-4 py-3 rounded-lg">
+              <h2 className="text-[20px] md:text-[24px] lg:text-[24px] font-bold bg-softBlue px-4 py-3 rounded-lg">
                 {grammar.grammarSummary}
               </h2>
-              <p className="text-lg text-[#757575] mt-2 px-4">
+              <p className="text-[16px] md:text-[18px] lg:text-[18px] text-[#757575] mt-2 px-4">
                 {grammar.chineseSummary}
               </p>
             </Link>
