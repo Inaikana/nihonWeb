@@ -34,6 +34,8 @@ export function Grammar() {
   const grammars = useGetGrammars().data; // 用變數grammars取得API所有文法 (data上面用過了)
   const grammarsData = grammars ?? [];
 
+  // TODO 直接路由問題
+
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
       <div className="w-[70%] flex shadow-md ">
@@ -123,17 +125,25 @@ export function Grammar() {
         <div className="overflow-scroll whitespace-nowrap w-100 h-200 bg-white  ">
           {/* 【 6 】 其餘集數選單 */}
           <div className="flex flex-col w-fit min-w-full">
-            {grammarsData.map((grammar) => (
-              <Link
-                to={`/grammar/${grammar.jid}`}
-                key={grammar.jid}
-                className=""
-              >
-                <p className="bg-softBlue text-[20px] px-4 py-2 my-1 rounded-xl">
-                  {grammar.grammarSummary}
-                </p>
-              </Link>
-            ))}
+            {grammarsData.map((grammar) =>
+              jid === grammar.jid ? (
+                <div key={grammar.jid}>
+                  <p className="bg-softPink text-heavyPink text-[20px] font-bold px-4 py-2 my-1 rounded-xl ">
+                    {grammar.grammarSummary}
+                  </p>
+                </div>
+              ) : (
+                <Link
+                  to={`/grammar/${grammar.jid}`}
+                  key={grammar.jid}
+                  className="block"
+                >
+                  <p className="bg-softBlue text-[20px] px-4 py-2 my-1 rounded-xl ">
+                    {grammar.grammarSummary}
+                  </p>
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </div>
