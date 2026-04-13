@@ -10,31 +10,23 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 export function Grammar() {
-  const { data } = useGetGrammars();
-  const { jid } = useParams<{ jid: string }>();
+  const { data, isLoading } = useGetGrammars(); // 從API函數拿到資料
+  const { jid } = useParams<{ jid: string }>(); // 從路由拿到jid
 
-  const grammarData = useMemo(() => {
-    return data?.find((grammar) => grammar.jid === jid);
+  const { currentGrammar, allGrammars } = useMemo(() => {
+    const all = data ?? [];
+    const current = all.find((g) => g.jid === jid);
+    return { currentGrammar: current, allGrammars: all };
   }, [data, jid]);
+  // 用 useMemo 回傳一個物件 包含單一jid的文法 和 全部文法
 
-  if (!data) {
+  if (isLoading || !data) {
     return <div>讀取中...</div>;
   }
 
-  if (!grammarData) {
-    return <div>讀取失敗</div>;
+  if (!currentGrammar) {
+    return <div>找不到該文法資料</div>;
   }
-
-  // 若直接用路由到此頁面 useGetGrammars()尚未抓到資料之前
-  // grammarData 就會是 undefined 導致頁面錯誤
-  // 在這使用 useMemo 加 if 判斷防呆 來處理
-  // 雖然一開始一樣會全白 但隨著 useGetGrammars() 抓到資料
-  // useMemo的依賴陣列更新 重新渲染一次組件
-
-  const grammars = useGetGrammars().data; // 用變數grammars取得API所有文法 (data上面用過了)
-  const grammarsData = grammars ?? [];
-
-  // TODO 直接路由問題
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
@@ -43,11 +35,11 @@ export function Grammar() {
         <div className=" bg-white   px-12  ">
           {/* 【 1 】 集數 + 順序 */}
           <p className="bg-main text-[20px] mt-6 px-3 py-1 rounded-xl inline-block">
-            第{grammarData.episodeNumber}集
+            第{currentGrammar.episodeNumber}集
           </p>
 
           <div className="text-[20px]  inline-block ml-2">
-            {grammarData.order}
+            {currentGrammar.order}
           </div>
 
           {/* 【 2 】 文法公式 */}
@@ -59,20 +51,20 @@ export function Grammar() {
             </h3>
 
             <h2 className="bg-softBlue mt-2 px-3 py-2 font-bold text-[24px] rounded-lg">
-              {grammarData.grammarPattern}
+              {currentGrammar.grammarPattern}
             </h2>
-            <p className="text-[20px] mt-2">{grammarData.chineseMeaning}</p>
+            <p className="text-[20px] mt-2">{currentGrammar.chineseMeaning}</p>
           </div>
 
           {/* 【 3 】 備註 */}
-          {grammarData.notes && grammarData.notes.length > 0 && (
+          {currentGrammar.notes && currentGrammar.notes.length > 0 && (
             <div className="mt-10">
               <h3 className="flex items-center text-[16px]">
                 <LuNotebookText />
                 <p className="ml-2">備註</p>
               </h3>
               <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
-                {grammarData.notes.map((note) => (
+                {currentGrammar.notes.map((note) => (
                   <div>{note}</div>
                 ))}
               </div>
@@ -87,7 +79,7 @@ export function Grammar() {
             </h3>
 
             <div className="mt-2 text-[20px]">
-              {grammarData.examples.map((example, index) => (
+              {currentGrammar.examples.map((example, index) => (
                 <p key={index}>
                   <Hiragana text={example.japanese}></Hiragana>
                 </p>
@@ -103,20 +95,20 @@ export function Grammar() {
             </h3>
 
             <div className="flex mt-2 mb-20">
-              <a href={grammarData.referenceUrl} target="_blank">
+              <a href={currentGrammar.referenceUrl} target="_blank">
                 <img
                   className="w-50"
-                  src={grammarData.thumbnail}
+                  src={currentGrammar.thumbnail}
                   alt="Youtube縮圖"
                 />
               </a>
 
               <a
                 className="mx-4 h-full text-[20px] hover:font-bold hover:text-heavyPink"
-                href={grammarData.referenceUrl}
+                href={currentGrammar.referenceUrl}
                 target="_blank"
               >
-                {grammarData.videoTitle}
+                {currentGrammar.videoTitle}
               </a>
             </div>
           </div>
@@ -125,7 +117,7 @@ export function Grammar() {
         <div className="overflow-scroll whitespace-nowrap w-100 h-200 bg-white  ">
           {/* 【 6 】 其餘集數選單 */}
           <div className="flex flex-col w-fit min-w-full">
-            {grammarsData.map((grammar) =>
+            {allGrammars.map((grammar) =>
               jid === grammar.jid ? (
                 <div key={grammar.jid}>
                   <p className="bg-softPink text-heavyPink text-[20px] font-bold px-4 py-2 my-1 rounded-xl ">
