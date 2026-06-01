@@ -1,11 +1,12 @@
 export function EpisodesMenu() {
   return (
     <select
+      defaultValue=""
       className="text-center text-[20px] rounded-lg px-4 border-2 border-main bg-white"
       name="episode"
       id="episode-select"
     >
-      <option disabled selected className=" bg-[#cccccc]" value="">
+      <option disabled  className=" bg-[#cccccc]" value="">
         選擇集數
       </option>
       <option value="1">第1集</option>
