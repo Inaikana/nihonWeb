@@ -138,7 +138,7 @@ export function Grammars() {
 
         {/* 【 5 】 文法區 */}
         <div className="flex flex-col gap-4 mt-8 mb-20">
-          {grammarsData.map((grammar) => (
+          {grammarsData?.map((grammar) => (
             <Link
               to={`/grammar/${grammar.jid}`}
               key={grammar.jid}
