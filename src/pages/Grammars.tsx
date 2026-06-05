@@ -5,12 +5,59 @@ import { Link } from "react-router-dom";
 import { useGetGrammars } from "../hooks/useGetGrammars";
 import { GoChevronLeft } from "react-icons/go";
 import { GoChevronRight } from "react-icons/go";
+import { useSearchParams } from "react-router-dom";
+import type { GrammarQueryParams } from "../types/GrammarParams";
+import { useEffect } from "react";
 
 export function Grammars() {
   const { data } = useGetGrammars();
 
   // 若 data 不存在，直接回傳一個空陣列，避免 map 報錯
   const grammarsData = data ?? [];
+
+  // 設置前端路由
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  useEffect(() => {
+    if (!searchParams.has("page")) {
+      // 如果網址沒有 ?page=，主動塞入 page=1，這時網址就會立刻變化
+      updateQueryParams({ page: "1" });
+    }
+  }, [searchParams]);
+
+  const updateQueryParams = (newParams: Partial<GrammarQueryParams>): void => {
+    setSearchParams((prev: URLSearchParams) => {
+      const nextParams = new URLSearchParams(prev);
+
+      // 強制斷言，確保執行時擁有嚴格的鍵值型別檢查
+      const entries = Object.entries(newParams) as [
+        keyof GrammarQueryParams,
+        string | undefined,
+      ][];
+
+      entries.forEach(([key, value]) => {
+        if (value === null || value === undefined || value === "") {
+          nextParams.delete(key); // 欄位為空時，從網址移除該參數，保持網址乾淨
+        } else {
+          nextParams.set(key, value); // 疊加或覆蓋原有參數
+        }
+      });
+
+      // 防呆機制：當觸發「非頁碼」的篩選/搜尋動作時，強制將頁碼歸回第 1 頁
+      const isFilterChanged =
+        newParams.keyword !== undefined ||
+        newParams.tag !== undefined ||
+        newParams.episodeNumber !== undefined;
+
+      if (isFilterChanged && !newParams.page) {
+        nextParams.set("page", "1");
+      }
+
+      return nextParams;
+    });
+  };
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
@@ -128,11 +175,25 @@ export function Grammars() {
 
         <div className="mt-8 flex justify-center text-[20px]">
           <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
-            <GoChevronLeft className="text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink" />
+            <GoChevronLeft
+              onClick={() => {
+                if (currentPage <= 1) return;
+                updateQueryParams({ page: String(currentPage - 1) });
+              }}
+              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+            />
             <p>1</p>
             <p className="mx-4">/</p>
             <p>5</p>
-            <GoChevronRight className="text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink" />
+            <GoChevronRight
+              onClick={() => {
+                if (currentPage >= 5) return; // totalPages
+                updateQueryParams({ page: String(currentPage + 1) });
+              }}
+              className={`${
+                currentPage >= 5 ? "opacity-30 pointer-events-none" : ""
+              }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
+            />
           </div>
         </div>
 
