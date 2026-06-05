@@ -23,5 +23,17 @@ export interface GrammarRule {
   referenceUrl: string;
   thumbnail: string;
   videoTitle: string;
+  tags: string[];
   quizs: QuizRule[];
+}
+
+export interface BackObjRule {
+  success: boolean;
+  grammarsData: GrammarRule[];
+  pagination: {
+    totalItems: number;
+    currentPage: number;
+    totalPages: number;
+    limit: number;
+  };
 }

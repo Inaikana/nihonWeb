@@ -13,7 +13,15 @@ export function Grammars() {
   const { data } = useGetGrammars();
 
   // 若 data 不存在，直接回傳一個空陣列，避免 map 報錯
-  const grammarsData = data ?? [];
+  const backObj = data;
+
+  const grammarsData = backObj?.grammarsData || [];
+  const pagination = backObj?.pagination || {
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    limit: 20,
+  };
 
   // 設置前端路由
   const [searchParams, setSearchParams] = useSearchParams();
@@ -182,16 +190,18 @@ export function Grammars() {
               }}
               className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
             />
-            <p>1</p>
+            <p>{pagination.currentPage}</p>
             <p className="mx-4">/</p>
-            <p>5</p>
+            <p>{pagination.totalPages}</p>
             <GoChevronRight
               onClick={() => {
-                if (currentPage >= 5) return; // totalPages
+                if (currentPage >= pagination.totalPages) return;
                 updateQueryParams({ page: String(currentPage + 1) });
               }}
               className={`${
-                currentPage >= 5 ? "opacity-30 pointer-events-none" : ""
+                currentPage >= pagination.totalPages
+                  ? "opacity-30 pointer-events-none"
+                  : ""
               }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
             />
           </div>
