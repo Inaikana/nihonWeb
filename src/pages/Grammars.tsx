@@ -26,6 +26,7 @@ export function Grammars() {
   // 設置前端路由
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // 從路由抓取當前頁碼，預設為 1
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export function Grammars() {
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
       <div className="w-[90%] md:w-[80%]  lg:w-[60%] ">
         {/* 【 1 】聲明  */}
+
         <div className="w-full bg-white border-t-4 border-main inline-block mt-15 px-4 md:px-12 lg:px-12 py-8 rounded-2xl shadow-[0_4px_20px_-3px_rgb(184,231,255,0.7)]">
           {/* 聲明 */}
           <div className="text-black text-center text-[24px] md:text-[40px] lg:text-[40px] font-[1000] tracking-wider ">
@@ -142,6 +144,7 @@ export function Grammars() {
           </div>
         </div>
         {/* 【 2 】搜尋框 */}
+
         <input
           className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
           type="search"
@@ -179,7 +182,7 @@ export function Grammars() {
           <EpisodesMenu />
         </div>
 
-        {/* 【 4 】 分頁  */}
+        {/* 【 4 】 上分頁  */}
 
         <div className="mt-8 flex justify-center text-[20px]">
           <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
@@ -190,7 +193,7 @@ export function Grammars() {
               }}
               className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
             />
-            <p>{pagination.currentPage}</p>
+            <p>{currentPage}</p>
             <p className="mx-4">/</p>
             <p>{pagination.totalPages}</p>
             <GoChevronRight
@@ -208,6 +211,7 @@ export function Grammars() {
         </div>
 
         {/* 【 5 】 文法區 */}
+
         <div className="flex flex-col gap-4 mt-8 mb-20">
           {grammarsData?.map((grammar) => (
             <Link
@@ -223,6 +227,34 @@ export function Grammars() {
               </p>
             </Link>
           ))}
+        </div>
+
+        {/* 【 6 】 下分頁  */}
+
+        <div className="mt-8 mb-24 flex justify-center text-[20px]">
+          <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
+            <GoChevronLeft
+              onClick={() => {
+                if (currentPage <= 1) return;
+                updateQueryParams({ page: String(currentPage - 1) });
+              }}
+              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+            />
+            <p>{currentPage}</p>
+            <p className="mx-4">/</p>
+            <p>{pagination.totalPages}</p>
+            <GoChevronRight
+              onClick={() => {
+                if (currentPage >= pagination.totalPages) return;
+                updateQueryParams({ page: String(currentPage + 1) });
+              }}
+              className={`${
+                currentPage >= pagination.totalPages
+                  ? "opacity-30 pointer-events-none"
+                  : ""
+              }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
+            />
+          </div>
         </div>
       </div>
     </MainLayout>

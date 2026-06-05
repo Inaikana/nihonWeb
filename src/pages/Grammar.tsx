@@ -9,20 +9,23 @@ import { useGetGrammars } from "../hooks/useGetGrammars";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-export function Grammar() {
-  const { data, isLoading } = useGetGrammars(); // 從API函數拿到資料
-  const { jid } = useParams<{ jid: string }>(); // 從路由拿到jid
+// ❗❗❗ 之後要再做一個用id直接回傳個別文法的API函數
+// ❗❗❗ 現在 F5 或 直接路由 會白屏 等之後做完id抓文法後 再來優化
 
-  const { currentGrammar, allGrammars } = useMemo(() => {
-    const all = data ?? [];
-    const current = all.find((g) => g.jid === jid);
-    return { currentGrammar: current, allGrammars: all };
-  }, [data, jid]);
-  // 用 useMemo 回傳一個物件 包含單一jid的文法 和 全部文法
+export function Grammar() {
+  const { data, isLoading } = useGetGrammars(); // 從API函數拿包含分頁資訊的大物件
+  const { jid } = useParams<{ jid: string }>(); // 從路由拿到jid
 
   if (isLoading || !data) {
     return <div>讀取中...</div>;
   }
+
+  // 用 useMemo 回傳一個物件 包含單一jid的文法 和 全部文法
+  const { currentGrammar, allGrammars } = useMemo(() => {
+    const all = data.grammarsData ?? []; // 從大物件裡拿出文法陣列，若不存在則給空陣列
+    const current = all.find((g) => g.jid === jid);
+    return { currentGrammar: current, allGrammars: all };
+  }, [data, jid]);
 
   if (!currentGrammar) {
     return <div>找不到該文法資料</div>;
@@ -64,8 +67,8 @@ export function Grammar() {
                 <p className="ml-2">備註</p>
               </h3>
               <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
-                {currentGrammar.notes.map((note) => (
-                  <div>{note}</div>
+                {currentGrammar.notes.map((note, index) => (
+                  <div key={index}>{note}</div>
                 ))}
               </div>
             </div>
