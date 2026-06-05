@@ -12,10 +12,11 @@ import { useEffect } from "react";
 export function Grammars() {
   const { data } = useGetGrammars();
 
-  // 若 data 不存在，直接回傳一個空陣列，避免 map 報錯
   const backObj = data;
 
-  const grammarsData = backObj?.grammarsData || [];
+  const grammarsData = backObj?.grammarsData || []; // 若不存在，直接回傳一個空陣列，避免 map 報錯
+
+  // 同上若還不存在 先給一個預設的分頁物件 確保後續使用 pagination 的屬性不會報錯
   const pagination = backObj?.pagination || {
     currentPage: 1,
     totalPages: 1,
@@ -27,17 +28,15 @@ export function Grammars() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // 從路由抓取當前頁碼，預設為 1
+  // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  useEffect(() => {
-    if (!searchParams.has("page")) {
-      // 如果網址沒有 ?page=，主動塞入 page=1，這時網址就會立刻變化
-      updateQueryParams({ page: "1" });
-    }
-  }, [searchParams]);
-
-  const updateQueryParams = (newParams: Partial<GrammarQueryParams>): void => {
+  // : void 表示函式僅執 沒回傳值
+  const updateQueryParams = (newParams: GrammarQueryParams): void => {
+    // setSearchParams 接收一個callback
+    // prev的 URLSearchParams 是型別
     setSearchParams((prev: URLSearchParams) => {
+      // new URLSearchParams(prev) 的URLSearchParams是建模函數
       const nextParams = new URLSearchParams(prev);
 
       // 強制斷言，確保執行時擁有嚴格的鍵值型別檢查
@@ -67,6 +66,13 @@ export function Grammars() {
       return nextParams;
     });
   };
+
+  useEffect(() => {
+    // 如果網址沒有 ?page= 主動塞入 page=1
+    if (!searchParams.has("page")) {
+      updateQueryParams({ page: "1" });
+    }
+  }, [searchParams]);
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
