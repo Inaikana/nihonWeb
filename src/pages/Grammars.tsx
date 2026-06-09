@@ -13,10 +13,6 @@ export function Grammars() {
   // 設置前端路由
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 從路由抓取當前頁碼，預設為 1
-  // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
-
   // 1. 從網址即時解析出目前的篩選條件
   const currentParams: GrammarQueryParams = {
     page: searchParams.get("page") || "1",
@@ -24,6 +20,10 @@ export function Grammars() {
     tag: searchParams.get("tag") || undefined,
     episodeNumber: searchParams.get("episodeNumber") || undefined,
   };
+
+  // 從路由抓取當前頁碼，預設為 1
+  // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
+  const currentPage = parseInt(currentParams.page || "1", 10);
 
   const { data, isLoading, isError, error } = useGetGrammars(currentParams);
 
@@ -60,7 +60,7 @@ export function Grammars() {
         if (value === null || value === undefined || value === "") {
           nextParams.delete(key); // 欄位為空時，從網址移除該參數，保持網址乾淨
         } else {
-          nextParams.set(key, value); // 疊加或覆蓋原有參數
+          nextParams.set(key, value); // 用set能直接蓋掉舊的值 如果key不存在 就新增
         }
       });
 
@@ -271,16 +271,24 @@ export function Grammars() {
 
         <div className="mt-8 mb-24 flex justify-center text-[20px]">
           <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
+            {/* 上一頁 */}
             <GoChevronLeft
               onClick={() => {
-                if (pagination.currentPage <= 1) return;
+                if (currentPage <= 1) return;
                 updateQueryParams({ page: String(currentPage - 1) });
               }}
-              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
             />
+
+            {/* 當前頁數 抓路由 */}
             <p>{currentPage}</p>
+
             <p className="mx-4">/</p>
+
+            {/* 總頁數 抓後端給的 */}
             <p>{pagination.totalPages}</p>
+
+            {/* 下一頁 */}
             <GoChevronRight
               onClick={() => {
                 if (currentPage >= pagination.totalPages) return;
@@ -290,7 +298,7 @@ export function Grammars() {
                 currentPage >= pagination.totalPages
                   ? "opacity-30 pointer-events-none"
                   : ""
-              }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
+              } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
             />
           </div>
         </div>

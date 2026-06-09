@@ -7,10 +7,10 @@ export async function fetchGrammars(
 ): Promise<BackObjRule> {
   const searchParams = new URLSearchParams();
 
-  // 把有值的參數塞進 URLSearchParams
+  // 避免undefined、null、空字符串的參數被加入到路由中
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
-      searchParams.append(key, value);
+      searchParams.append(key, value); // append : 不管這個 key 是否存在，它都會直接在後面追加一組key=??? 允許同一個 key 同時擁有複數個值 實現多選功能
     }
   });
 
