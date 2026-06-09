@@ -35,14 +35,17 @@ export function Grammars() {
   const updateQueryParams = (newParams: GrammarQueryParams): void => {
     // setSearchParams 接收一個callback
     // prev的 URLSearchParams 是型別
+    // prev 是網址上最即時、最原始的舊參數物件 這是在使用 setSearchParams 時由 React 定義的
     setSearchParams((prev: URLSearchParams) => {
       // new URLSearchParams(prev) 的URLSearchParams是建模函數
+      // new 一個現在網址的物件
       const nextParams = new URLSearchParams(prev);
 
-      // 強制斷言，確保執行時擁有嚴格的鍵值型別檢查
+      // Object.entries(newParams) 會把 newParams 這個物件轉成一個陣列
+      // 例如 { keyword: "test", tag: "verb" } 會變成 [ ["keyword", "test"], ["tag", "verb"] ]
       const entries = Object.entries(newParams) as [
-        keyof GrammarQueryParams,
-        string | undefined,
+        keyof GrammarQueryParams, // 必須是 GrammarQueryParams 其中一個key的名字
+        string | undefined, // 型別可以是字串或 undefined（因為 GrammarQueryParams 的屬性都是可選的）
       ][];
 
       entries.forEach(([key, value]) => {
