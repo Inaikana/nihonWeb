@@ -85,12 +85,6 @@ export function Grammars() {
     }
   }, [searchParams]);
 
-  // 處理分頁點擊事件
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > pagination.totalPages) return;
-    updateQueryParams({ page: String(newPage) });
-  };
-
   if (isLoading) return <div>載入中...</div>;
   if (isError)
     return (
@@ -174,17 +168,28 @@ export function Grammars() {
         </div>
         {/* 【 2 】搜尋框 */}
 
-        <input
-          className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
-          type="search"
-          placeholder="請搜尋文法 ( 例如 : ください　)"
-          defaultValue={currentParams.keyword || ""}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              updateQueryParams({ keyword: e.currentTarget.value });
-            }
+        {/* 在 <form> 裡的 <input> 一旦按下 Enter或是點擊提交 就會觸發該表單的 submit 事件 */}
+        <form
+          onSubmit={(e) => {
+            // 阻止表單原生重新整理網頁的行為
+            e.preventDefault();
+
+            // 透過 FormData 抓輸入框的值（ input 要有一樣的 name 屬性）
+            const formData = new FormData(e.currentTarget);
+            const keywordValue = formData.get("grammarSearch") as string;
+
+            // 直接更新路由
+            updateQueryParams({ keyword: keywordValue });
           }}
-        />
+        >
+          <input
+            name="grammarSearch"
+            className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
+            type="search"
+            placeholder="請搜尋文法 ( 例如 : ください　)"
+            defaultValue={currentParams.keyword || ""}
+          />
+        </form>
         {/* 【 3 】 篩選 + 集數 */}
 
         <div className="flex justify-between mt-4">
@@ -221,33 +226,41 @@ export function Grammars() {
         </div>
 
         {/* 【 4 】 上分頁  */}
+        {pagination.totalPages > 0 && (
+          <div className="mt-8  flex justify-center text-[20px]">
+            <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
+              {/* 上一頁 */}
+              <GoChevronLeft
+                onClick={() => {
+                  if (currentPage <= 1) return;
+                  updateQueryParams({ page: String(currentPage - 1) });
+                }}
+                className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+              />
 
-        <div className="mt-8 flex justify-center text-[20px]">
-          <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
-            <GoChevronLeft
-              onClick={() => {
-                if (pagination.currentPage <= 1) return;
-                updateQueryParams({ page: String(pagination.currentPage - 1) });
-              }}
-              className={`${pagination.currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
-            />
-            <p>{pagination.currentPage}</p>
-            <p className="mx-4">/</p>
-            <p>{pagination.totalPages}</p>
-            <GoChevronRight
-              onClick={() => {
-                if (pagination.currentPage >= pagination.totalPages) return;
-                updateQueryParams({ page: String(pagination.currentPage + 1) });
-              }}
-              className={`${
-                pagination.currentPage >= pagination.totalPages
-                  ? "opacity-30 pointer-events-none"
-                  : ""
-              }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
-            />
+              {/* 當前頁數 抓路由 */}
+              <p>{currentPage}</p>
+
+              <p className="mx-4">/</p>
+
+              {/* 總頁數 抓後端給的 */}
+              <p>{pagination.totalPages}</p>
+
+              {/* 下一頁 */}
+              <GoChevronRight
+                onClick={() => {
+                  if (currentPage >= pagination.totalPages) return;
+                  updateQueryParams({ page: String(currentPage + 1) });
+                }}
+                className={`${
+                  currentPage >= pagination.totalPages
+                    ? "opacity-30 pointer-events-none"
+                    : ""
+                } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
+              />
+            </div>
           </div>
-        </div>
-
+        )}
         {/* 【 5 】 文法區 */}
 
         <div className="flex flex-col gap-4 mt-8 mb-20">
@@ -268,40 +281,41 @@ export function Grammars() {
         </div>
 
         {/* 【 6 】 下分頁  */}
+        {pagination.totalPages > 0 && (
+          <div className="mt-8 mb-24 flex justify-center text-[20px]">
+            <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
+              {/* 上一頁 */}
+              <GoChevronLeft
+                onClick={() => {
+                  if (currentPage <= 1) return;
+                  updateQueryParams({ page: String(currentPage - 1) });
+                }}
+                className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+              />
 
-        <div className="mt-8 mb-24 flex justify-center text-[20px]">
-          <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
-            {/* 上一頁 */}
-            <GoChevronLeft
-              onClick={() => {
-                if (currentPage <= 1) return;
-                updateQueryParams({ page: String(currentPage - 1) });
-              }}
-              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
-            />
+              {/* 當前頁數 抓路由 */}
+              <p>{currentPage}</p>
 
-            {/* 當前頁數 抓路由 */}
-            <p>{currentPage}</p>
+              <p className="mx-4">/</p>
 
-            <p className="mx-4">/</p>
+              {/* 總頁數 抓後端給的 */}
+              <p>{pagination.totalPages}</p>
 
-            {/* 總頁數 抓後端給的 */}
-            <p>{pagination.totalPages}</p>
-
-            {/* 下一頁 */}
-            <GoChevronRight
-              onClick={() => {
-                if (currentPage >= pagination.totalPages) return;
-                updateQueryParams({ page: String(currentPage + 1) });
-              }}
-              className={`${
-                currentPage >= pagination.totalPages
-                  ? "opacity-30 pointer-events-none"
-                  : ""
-              } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
-            />
+              {/* 下一頁 */}
+              <GoChevronRight
+                onClick={() => {
+                  if (currentPage >= pagination.totalPages) return;
+                  updateQueryParams({ page: String(currentPage + 1) });
+                }}
+                className={`${
+                  currentPage >= pagination.totalPages
+                    ? "opacity-30 pointer-events-none"
+                    : ""
+                } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </MainLayout>
   );
