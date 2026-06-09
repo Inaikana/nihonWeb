@@ -10,7 +10,22 @@ import type { GrammarQueryParams } from "../types/GrammarParams";
 import { useEffect } from "react";
 
 export function Grammars() {
-  const { data } = useGetGrammars();
+  // 設置前端路由
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // 從路由抓取當前頁碼，預設為 1
+  // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  // 1. 從網址即時解析出目前的篩選條件
+  const currentParams: GrammarQueryParams = {
+    page: searchParams.get("page") || "1",
+    keyword: searchParams.get("keyword") || undefined,
+    tag: searchParams.get("tag") || undefined,
+    episodeNumber: searchParams.get("episodeNumber") || undefined,
+  };
+
+  const { data, isLoading, isError, error } = useGetGrammars(currentParams);
 
   const backObj = data;
 
@@ -23,13 +38,6 @@ export function Grammars() {
     totalItems: 0,
     limit: 20,
   };
-
-  // 設置前端路由
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // 從路由抓取當前頁碼，預設為 1
-  // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   // : void 表示函式僅執 沒回傳值
   const updateQueryParams = (newParams: GrammarQueryParams): void => {
@@ -76,6 +84,18 @@ export function Grammars() {
       updateQueryParams({ page: "1" });
     }
   }, [searchParams]);
+
+  // 處理分頁點擊事件
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > pagination.totalPages) return;
+    updateQueryParams({ page: String(newPage) });
+  };
+
+  if (isLoading) return <div>載入中...</div>;
+  if (isError)
+    return (
+      <div>發生錯誤: {error instanceof Error ? error.message : "未知錯誤"}</div>
+    );
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
@@ -158,6 +178,12 @@ export function Grammars() {
           className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
           type="search"
           placeholder="請搜尋文法 ( 例如 : ください　)"
+          defaultValue={currentParams.keyword || ""}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              updateQueryParams({ keyword: e.currentTarget.value });
+            }
+          }}
         />
         {/* 【 3 】 篩選 + 集數 */}
 
@@ -188,7 +214,10 @@ export function Grammars() {
               假設
             </button>
           </div>
-          <EpisodesMenu />
+          <EpisodesMenu
+          // currentEpisode={currentParams.episodeNumber}
+          // onSelect={(ep) => updateQueryParams({ episodeNumber: ep })}
+          />
         </div>
 
         {/* 【 4 】 上分頁  */}
@@ -197,21 +226,21 @@ export function Grammars() {
           <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
             <GoChevronLeft
               onClick={() => {
-                if (currentPage <= 1) return;
-                updateQueryParams({ page: String(currentPage - 1) });
+                if (pagination.currentPage <= 1) return;
+                updateQueryParams({ page: String(pagination.currentPage - 1) });
               }}
-              className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+              className={`${pagination.currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
             />
-            <p>{currentPage}</p>
+            <p>{pagination.currentPage}</p>
             <p className="mx-4">/</p>
             <p>{pagination.totalPages}</p>
             <GoChevronRight
               onClick={() => {
-                if (currentPage >= pagination.totalPages) return;
-                updateQueryParams({ page: String(currentPage + 1) });
+                if (pagination.currentPage >= pagination.totalPages) return;
+                updateQueryParams({ page: String(pagination.currentPage + 1) });
               }}
               className={`${
-                currentPage >= pagination.totalPages
+                pagination.currentPage >= pagination.totalPages
                   ? "opacity-30 pointer-events-none"
                   : ""
               }text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
@@ -244,7 +273,7 @@ export function Grammars() {
           <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
             <GoChevronLeft
               onClick={() => {
-                if (currentPage <= 1) return;
+                if (pagination.currentPage <= 1) return;
                 updateQueryParams({ page: String(currentPage - 1) });
               }}
               className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""}text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
