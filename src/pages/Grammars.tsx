@@ -220,8 +220,8 @@ export function Grammars() {
             </button>
           </div>
           <EpisodesMenu
-          // currentEpisode={currentParams.episodeNumber}
-          // onSelect={(ep) => updateQueryParams({ episodeNumber: ep })}
+            currentEpisode={currentParams.episodeNumber}
+            onSelect={(ep) => updateQueryParams({ episodeNumber: ep })}
           />
         </div>
 
