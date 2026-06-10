@@ -17,7 +17,7 @@ export function Grammars() {
   const currentParams: GrammarQueryParams = {
     page: searchParams.get("page") || "1",
     keyword: searchParams.get("keyword") || undefined,
-    tag: searchParams.get("tag") || undefined,
+    tags: searchParams.get("tags") || undefined,
     episodeNumber: searchParams.get("episodeNumber") || undefined,
   };
 
@@ -67,7 +67,7 @@ export function Grammars() {
       // 防呆機制：當觸發「非頁碼」的篩選/搜尋動作時，強制將頁碼歸回第 1 頁
       const isFilterChanged =
         newParams.keyword !== undefined ||
-        newParams.tag !== undefined ||
+        newParams.tags !== undefined ||
         newParams.episodeNumber !== undefined;
 
       if (isFilterChanged && !newParams.page) {
@@ -197,6 +197,7 @@ export function Grammars() {
             <button
               className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer hover:bg-main hover:font-bold"
               type="button"
+              onClick={() => updateQueryParams({ tags: "動詞" })}
             >
               動詞
             </button>
@@ -209,6 +210,7 @@ export function Grammars() {
             <button
               className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
               type="button"
+              onClick={() => updateQueryParams({ tags: "因為" })}
             >
               因為
             </button>
@@ -219,6 +221,8 @@ export function Grammars() {
               假設
             </button>
           </div>
+          {/* 使用 props 把路由上的集數 和 更新路由的函數 傳遞給下拉式選單組件 */}
+          {/* 為了讓使用者能透過路由分享篩選結果 以及【清除篩選】的功能 所以需要把陸由的集數傳遞給下拉式選單 */}
           <EpisodesMenu
             currentEpisode={currentParams.episodeNumber}
             onSelect={(ep) => updateQueryParams({ episodeNumber: ep })}
