@@ -169,27 +169,37 @@ export function Grammars() {
         {/* 【 2 】搜尋框 */}
 
         {/* 在 <form> 裡的 <input> 一旦按下 Enter或是點擊提交 就會觸發該表單的 submit 事件 */}
-        <form
-          onSubmit={(e) => {
-            // 阻止表單原生重新整理網頁的行為
-            e.preventDefault();
 
-            // 透過 FormData 抓輸入框的值（ input 要有一樣的 name 屬性）
-            const formData = new FormData(e.currentTarget);
-            const keywordValue = formData.get("grammarSearch") as string;
+        <div className="flex  mt-12 gap-4">
+          <form
+            className="w-full"
+            onSubmit={(e) => {
+              // 阻止表單原生重新整理網頁的行為
+              e.preventDefault();
 
-            // 直接更新路由
-            updateQueryParams({ keyword: keywordValue });
-          }}
-        >
-          <input
-            name="grammarSearch"
-            className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl mt-12 p-2 md:p-4 lg:p-4"
-            type="search"
-            placeholder="請搜尋文法 ( 例如 : ください　)"
-            defaultValue={currentParams.keyword || ""}
-          />
-        </form>
+              // 透過 FormData 抓輸入框的值（ input 要有一樣的 name 屬性）
+              const formData = new FormData(e.currentTarget);
+              const keywordValue = formData.get("grammarSearch") as string;
+
+              // 直接更新路由
+              updateQueryParams({ keyword: keywordValue });
+            }}
+          >
+            <input
+              name="grammarSearch"
+              className="bg-white w-full text-[16px] md:text-[20px] lg:text-[20px] border-2 border-main rounded-xl p-2 md:p-4 lg:p-4"
+              type="search"
+              placeholder="請搜尋文法 ( 例如 : ください　)"
+              defaultValue={currentParams.keyword || ""}
+            />
+          </form>
+          <button
+            type="button"
+            className="cursor-pointer  bg-[#F3F4F6] shrink-0 text-center text-[20px] px-5 border-2 border-[#BBBBBB] rounded-[6px]"
+          >
+            清除篩選
+          </button>
+        </div>
         {/* 【 3 】 篩選 + 集數 */}
 
         <div className="flex justify-between mt-4">
