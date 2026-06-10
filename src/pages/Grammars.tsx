@@ -204,6 +204,7 @@ export function Grammars() {
             <button
               className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
               type="button"
+              onClick={() => updateQueryParams({ tags: "形容詞" })}
             >
               形容詞
             </button>
@@ -217,6 +218,7 @@ export function Grammars() {
             <button
               className="bg-softBlue mx-2 px-3 py-1.5 rounded-xl border-2 border-main cursor-pointer  hover:bg-main hover:font-bold"
               type="button"
+              onClick={() => updateQueryParams({ tags: "假設" })}
             >
               假設
             </button>
