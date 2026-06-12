@@ -6,6 +6,7 @@ import { useGetGrammars } from "../hooks/useGetGrammars";
 import { GoChevronLeft } from "react-icons/go";
 import { GoChevronRight } from "react-icons/go";
 import { useSearchParams } from "react-router-dom";
+import { FaChevronCircleUp } from "react-icons/fa";
 import type { GrammarQueryParams } from "../types/GrammarParams";
 import { useEffect } from "react";
 
@@ -338,6 +339,12 @@ export function Grammars() {
           </div>
         )}
       </div>
+      <button
+        type="button"
+        className="cursor-pointer bg-white rounded-full fixed bottom-[1%] right-[1%] md:bottom-[3%] md:right-[1.5%] lg:bottom-[5%] lg:right-[5%] z-2"
+      >
+        <FaChevronCircleUp className=" text-main  text-[48px] md:text-[60px] lg:text-[80px]" />
+      </button>
     </MainLayout>
   );
 }
