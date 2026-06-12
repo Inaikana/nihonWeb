@@ -4,6 +4,7 @@ export interface GrammarQueryParams {
   keyword?: string;
   tags?: string;
   episodeNumber?: string;
+  limit?: string;
 }
 
 // 根據的後端 API 的參數型別（供對照或匯入使用）

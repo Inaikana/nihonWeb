@@ -5,29 +5,40 @@ import { LuNotebookText } from "react-icons/lu";
 import { FaRegFlag } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { useGrammarByJid } from "../hooks/useGrammarByJid";
+import { useGetGrammars } from "../hooks/useGetGrammars";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-// ❗❗❗ 之後要再做一個用id直接回傳個別文法的API函數
-// ❗❗❗ 現在 F5 或 直接路由 會白屏 等之後做完id抓文法後 再來優化
-
 export function Grammar() {
-  const { jid } = useParams<{ jid: string }>(); // 從路由拿到jid
-  const { data, isLoading, error } = useGrammarByJid(jid);
+  const { jid } = useParams<{ jid: string }>();
 
-  if (isLoading || !data) {
+  // 用抓全部文法的API 因為這頁右側選單也需要整份資料
+  // 這裡把 limit 設成一個夠大的值，避免只能拿到第一頁資料
+  const { data, isLoading, isError, error } = useGetGrammars({
+    page: "1",
+    limit: "500",
+  });
+
+  // 把自己callback的物件內容解構出來
+  const { grammarDetail, grammarList } = useMemo(() => {
+    const list = data?.grammarsData ?? [];
+
+    return {
+      // 用?? null 是為了確保如果找不到對應的文法，grammarDetail 會是 null 而不是 undefined  null 是一個明確的表示「沒有值」  undefined 可能是還沒抓到
+      grammarDetail: list.find((grammar) => grammar.jid === jid) ?? null,
+      grammarList: list,
+    };
+  }, [data, jid]);
+
+  if (isLoading) {
     return <div>讀取中...</div>;
   }
 
-  // 用 useMemo 回傳一個物件 包含單一jid的文法 和 全部文法
-  const { currentGrammar, allGrammars } = useMemo(() => {
-    const all = data.grammarsData ?? []; // 從大物件裡拿出文法陣列，若不存在則給空陣列
-    const current = all.find((g) => g.jid === jid);
-    return { currentGrammar: current, allGrammars: all };
-  }, [data, jid]);
+  if (isError) {
+    return <div>載入失敗</div>;
+  }
 
-  if (!currentGrammar) {
+  if (!grammarDetail) {
     return <div>找不到該文法資料</div>;
   }
 
@@ -38,11 +49,11 @@ export function Grammar() {
         <div className=" bg-white   px-12  ">
           {/* 【 1 】 集數 + 順序 */}
           <p className="bg-main text-[20px] mt-6 px-3 py-1 rounded-xl inline-block">
-            第{currentGrammar.episodeNumber}集
+            第{grammarDetail.episodeNumber}集
           </p>
 
           <div className="text-[20px]  inline-block ml-2">
-            {currentGrammar.order}
+            {grammarDetail.order}
           </div>
 
           {/* 【 2 】 文法公式 */}
@@ -54,20 +65,20 @@ export function Grammar() {
             </h3>
 
             <h2 className="bg-softBlue mt-2 px-3 py-2 font-bold text-[24px] rounded-lg">
-              {currentGrammar.grammarPattern}
+              {grammarDetail.grammarPattern}
             </h2>
-            <p className="text-[20px] mt-2">{currentGrammar.chineseMeaning}</p>
+            <p className="text-[20px] mt-2">{grammarDetail.chineseMeaning}</p>
           </div>
 
           {/* 【 3 】 備註 */}
-          {currentGrammar.notes && currentGrammar.notes.length > 0 && (
+          {grammarDetail.notes && grammarDetail.notes.length > 0 && (
             <div className="mt-10">
               <h3 className="flex items-center text-[16px]">
                 <LuNotebookText />
                 <p className="ml-2">備註</p>
               </h3>
               <div className="bg-softPink border-2 border-sub rounded-xl mt-2 py-3 px-4">
-                {currentGrammar.notes.map((note, index) => (
+                {grammarDetail.notes.map((note, index) => (
                   <div key={index}>{note}</div>
                 ))}
               </div>
@@ -82,7 +93,7 @@ export function Grammar() {
             </h3>
 
             <div className="mt-2 text-[20px]">
-              {currentGrammar.examples.map((example, index) => (
+              {grammarDetail.examples.map((example, index) => (
                 <p key={index}>
                   <Hiragana text={example.japanese}></Hiragana>
                 </p>
@@ -98,20 +109,20 @@ export function Grammar() {
             </h3>
 
             <div className="flex mt-2 mb-20">
-              <a href={currentGrammar.referenceUrl} target="_blank">
+              <a href={grammarDetail.referenceUrl} target="_blank">
                 <img
                   className="w-50"
-                  src={currentGrammar.thumbnail}
+                  src={grammarDetail.thumbnail}
                   alt="Youtube縮圖"
                 />
               </a>
 
               <a
                 className="mx-4 h-full text-[20px] hover:font-bold hover:text-heavyPink"
-                href={currentGrammar.referenceUrl}
+                href={grammarDetail.referenceUrl}
                 target="_blank"
               >
-                {currentGrammar.videoTitle}
+                {grammarDetail.videoTitle}
               </a>
             </div>
           </div>
@@ -120,7 +131,7 @@ export function Grammar() {
         <div className="overflow-scroll whitespace-nowrap w-100 h-200 bg-white  ">
           {/* 【 6 】 其餘集數選單 */}
           <div className="flex flex-col w-fit min-w-full">
-            {allGrammars.map((grammar) =>
+            {grammarList.map((grammar) =>
               jid === grammar.jid ? (
                 <div key={grammar.jid}>
                   <p className="bg-softPink text-heavyPink text-[20px] font-bold px-4 py-2 my-1 rounded-xl ">

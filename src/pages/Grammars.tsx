@@ -86,10 +86,7 @@ export function Grammars() {
   }, [searchParams]);
 
   if (isLoading) return <div>載入中...</div>;
-  if (isError)
-    return (
-      <div>發生錯誤: {error instanceof Error ? error.message : "未知錯誤"}</div>
-    );
+  if (isError) return <div>發生錯誤</div>;
 
   return (
     <MainLayout className="flex flex-col items-center w-full bg-slightWhile">
