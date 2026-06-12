@@ -196,6 +196,14 @@ export function Grammars() {
           <button
             type="button"
             className="cursor-pointer  bg-[#F3F4F6] shrink-0 text-center text-[20px] px-5 border-2 border-[#BBBBBB] rounded-[6px]"
+            onClick={() => {
+              updateQueryParams({
+                page: "1",
+                keyword: undefined,
+                tags: undefined,
+                episodeNumber: undefined,
+              });
+            }}
           >
             清除篩選
           </button>

@@ -5,7 +5,7 @@ import { LuNotebookText } from "react-icons/lu";
 import { FaRegFlag } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { useGetGrammars } from "../hooks/useGetGrammars";
+import { useGrammarByJid } from "../hooks/useGrammarByJid";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
@@ -13,8 +13,8 @@ import { Link } from "react-router-dom";
 // ❗❗❗ 現在 F5 或 直接路由 會白屏 等之後做完id抓文法後 再來優化
 
 export function Grammar() {
-  const { data, isLoading } = useGetGrammars(); // 從API函數拿包含分頁資訊的大物件
   const { jid } = useParams<{ jid: string }>(); // 從路由拿到jid
+  const { data, isLoading, error } = useGrammarByJid(jid);
 
   if (isLoading || !data) {
     return <div>讀取中...</div>;

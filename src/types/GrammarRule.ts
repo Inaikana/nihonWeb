@@ -37,3 +37,8 @@ export interface BackObjRule {
     limit: number;
   };
 }
+
+export interface BackGrammarIdRule {
+  success: boolean;
+  grammar: GrammarRule | null;
+}
