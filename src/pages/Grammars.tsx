@@ -9,8 +9,40 @@ import { useSearchParams } from "react-router-dom";
 import { FaChevronCircleUp } from "react-icons/fa";
 import type { GrammarQueryParams } from "../types/GrammarParams";
 import { useEffect } from "react";
+import { useState } from "react";
 
 export function Grammars() {
+  // 控制【回到頂部】按鈕的顯示狀態
+  const [isVisible, setIsVisible] = useState(false);
+
+  // 監聽網頁捲動事件
+  useEffect(() => {
+    const toggleVisibility = () => {
+      const oneScreenHeight = window.innerHeight; // 抓取當前視窗的 100% 高度
+      if (window.scrollY > oneScreenHeight) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    // 監聽 window 的 scroll 事件
+    window.addEventListener("scroll", toggleVisibility);
+
+    // 離開組件時 移除監聽器以效能優化
+    return () => {
+      window.removeEventListener("scroll", toggleVisibility);
+    };
+  }, []);
+
+  // 點擊按鈕時平滑滾動回頂部的函數
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 'smooth' 可以讓畫面有平滑滾動的效果，而不是瞬間彈上去
+    });
+  };
+
   // 設置前端路由
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -26,7 +58,7 @@ export function Grammars() {
   // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
   const currentPage = parseInt(currentParams.page || "1", 10);
 
-  const { data, isLoading, isError, error } = useGetGrammars(currentParams);
+  const { data, isLoading, isError } = useGetGrammars(currentParams);
 
   const backObj = data;
 
@@ -341,7 +373,8 @@ export function Grammars() {
       </div>
       <button
         type="button"
-        className="cursor-pointer bg-white rounded-full fixed bottom-[1%] right-[1%] md:bottom-[3%] md:right-[1.5%] lg:bottom-[5%] lg:right-[5%] z-2"
+        onClick={scrollToTop}
+        className={`cursor-pointer bg-white rounded-full fixed bottom-[1%] right-[1%] md:bottom-[3%] md:right-[1.5%] lg:bottom-[5%] lg:right-[5%] z-2 ${isVisible ? "" : "hidden pointer-events-none"}`}
       >
         <FaChevronCircleUp className=" text-main  text-[48px] md:text-[60px] lg:text-[80px]" />
       </button>
