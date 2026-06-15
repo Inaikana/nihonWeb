@@ -59,6 +59,7 @@ export function Grammars() {
 
   const pageSize = 20;
 
+  // .toLowerCase() 把字串所有英文變小寫 在此雖無英文輸入 但先寫好以防之後需要
   const filteredGrammars = useMemo(() => {
     const keyword = currentParams.keyword?.trim().toLowerCase();
     const tag = currentParams.tags?.trim();
@@ -74,13 +75,16 @@ export function Grammars() {
       ]
         .join(" ")
         .toLowerCase();
+      // .join(" ") 可以把上述所有key的值用空白組成的一個大字串 這樣就能一次比對所有key的值
 
       const matchesKeyword = !keyword || haystack.includes(keyword);
+      // .some() 陣列裡只要有一個元素符合 就會true
       const matchesTag =
         !tag ||
         (grammar.tags ?? []).some(
           (item) => item.toLowerCase() === tag.toLowerCase(),
         );
+      // 用!tag 當沒有tag時 左邊變true 直接放行所有資料 下面的 !episode 也是一樣的道理
       const matchesEpisode =
         !episode ||
         String(grammar.episodeNumber).trim() === String(episode).trim();
@@ -93,17 +97,24 @@ export function Grammars() {
     currentParams.tags,
     currentParams.episodeNumber,
   ]);
-
+  // Math.ceil() 無條件進位至整數
+  // Math.max(a, b, c...) 取其中的最大值
+  // 兩個一起用就是先算出總頁數 如果總頁數小於1 Math.max會選1 這樣就能確保 totalPages 最小值為1
   const totalPages = Math.max(1, Math.ceil(filteredGrammars.length / pageSize));
 
-  const currentPageSafe = Math.min(currentPage, totalPages);
+  // 正常來說 currentPage (當前頁數) 不會超過 totalPages (總頁數)
+  // 但避免使用者亂改路由修改page 這邊先判對是不是NaN來擋非數字
+  // 再用 min 擋超過總頁數的情況 再用 max 擋小於1的情況
+  const currentPageSafe = Number.isNaN(currentPage)
+    ? 1
+    : Math.max(1, Math.min(currentPage, totalPages));
 
   const pagedGrammars = useMemo(() => {
     const start = (currentPageSafe - 1) * pageSize;
     return filteredGrammars.slice(start, start + pageSize);
   }, [filteredGrammars, currentPageSafe]);
 
-  // : void 表示函式僅執 沒回傳值
+  // : void 表示函式僅執行 沒回傳值
   const updateQueryParams = (newParams: GrammarQueryParams): void => {
     // setSearchParams 接收一個callback
     // prev的 URLSearchParams 是型別

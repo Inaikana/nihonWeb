@@ -13,7 +13,7 @@ export function Grammar() {
   const { jid } = useParams<{ jid: string }>();
   const { data, isLoading, isError } = useGetGrammars();
 
-  // 把自己callback的物件內容解構出來
+  // 把自己callback回傳的物件內容解構出來
   const { grammarDetail, grammarList } = useMemo(() => {
     const list = data ?? [];
 
