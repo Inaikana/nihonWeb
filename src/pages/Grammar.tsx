@@ -11,17 +11,11 @@ import { Link } from "react-router-dom";
 
 export function Grammar() {
   const { jid } = useParams<{ jid: string }>();
-
-  // 用抓全部文法的API 因為這頁右側選單也需要整份資料
-  // 這裡把 limit 設成一個夠大的值，避免只能拿到第一頁資料
-  const { data, isLoading, isError, error } = useGetGrammars({
-    page: "1",
-    limit: "500",
-  });
+  const { data, isLoading, isError } = useGetGrammars();
 
   // 把自己callback的物件內容解構出來
   const { grammarDetail, grammarList } = useMemo(() => {
-    const list = data?.grammarsData ?? [];
+    const list = data ?? [];
 
     return {
       // 用?? null 是為了確保如果找不到對應的文法，grammarDetail 會是 null 而不是 undefined  null 是一個明確的表示「沒有值」  undefined 可能是還沒抓到

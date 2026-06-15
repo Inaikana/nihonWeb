@@ -8,8 +8,7 @@ import { GoChevronRight } from "react-icons/go";
 import { useSearchParams } from "react-router-dom";
 import { FaChevronCircleUp } from "react-icons/fa";
 import type { GrammarQueryParams } from "../types/GrammarParams";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function Grammars() {
   // 控制【回到頂部】按鈕的顯示狀態
@@ -46,7 +45,6 @@ export function Grammars() {
   // 設置前端路由
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 1. 從網址即時解析出目前的篩選條件
   const currentParams: GrammarQueryParams = {
     page: searchParams.get("page") || "1",
     keyword: searchParams.get("keyword") || undefined,
@@ -54,23 +52,56 @@ export function Grammars() {
     episodeNumber: searchParams.get("episodeNumber") || undefined,
   };
 
-  // 從路由抓取當前頁碼，預設為 1
   // parseInt 第二個參數 10 是為了確保以十進位解析 並順便無條件捨去 + 轉型成數字
   const currentPage = parseInt(currentParams.page || "1", 10);
 
-  const { data, isLoading, isError } = useGetGrammars(currentParams);
+  const { data: grammars = [], isLoading, isError } = useGetGrammars();
 
-  const backObj = data;
+  const pageSize = 20;
 
-  const grammarsData = backObj?.grammarsData || []; // 若不存在，直接回傳一個空陣列，避免 map 報錯
+  const filteredGrammars = useMemo(() => {
+    const keyword = currentParams.keyword?.trim().toLowerCase();
+    const tag = currentParams.tags?.trim();
+    const episode = currentParams.episodeNumber?.trim();
 
-  // 同上若還不存在 先給一個預設的分頁物件 確保後續使用 pagination 的屬性不會報錯
-  const pagination = backObj?.pagination || {
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    limit: 20,
-  };
+    return grammars.filter((grammar) => {
+      const haystack = [
+        grammar.grammarSummary,
+        grammar.chineseSummary,
+        grammar.grammarPattern,
+        grammar.chineseMeaning,
+        ...(grammar.tags ?? []),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const matchesKeyword = !keyword || haystack.includes(keyword);
+      const matchesTag =
+        !tag ||
+        (grammar.tags ?? []).some(
+          (item) => item.toLowerCase() === tag.toLowerCase(),
+        );
+      const matchesEpisode =
+        !episode ||
+        String(grammar.episodeNumber).trim() === String(episode).trim();
+
+      return matchesKeyword && matchesTag && matchesEpisode;
+    });
+  }, [
+    grammars,
+    currentParams.keyword,
+    currentParams.tags,
+    currentParams.episodeNumber,
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredGrammars.length / pageSize));
+
+  const currentPageSafe = Math.min(currentPage, totalPages);
+
+  const pagedGrammars = useMemo(() => {
+    const start = (currentPageSafe - 1) * pageSize;
+    return filteredGrammars.slice(start, start + pageSize);
+  }, [filteredGrammars, currentPageSafe]);
 
   // : void 表示函式僅執 沒回傳值
   const updateQueryParams = (newParams: GrammarQueryParams): void => {
@@ -110,13 +141,6 @@ export function Grammars() {
       return nextParams;
     });
   };
-
-  useEffect(() => {
-    // 如果網址沒有 ?page= 主動塞入 page=1
-    if (!searchParams.has("page")) {
-      updateQueryParams({ page: "1" });
-    }
-  }, [searchParams]);
 
   if (isLoading) return <div>載入中...</div>;
   if (isError) return <div>發生錯誤</div>;
@@ -280,34 +304,28 @@ export function Grammars() {
         </div>
 
         {/* 【 4 】 上分頁  */}
-        {pagination.totalPages > 0 && (
+        {totalPages > 1 && (
           <div className="mt-8  flex justify-center text-[20px]">
             <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
-              {/* 上一頁 */}
               <GoChevronLeft
                 onClick={() => {
-                  if (currentPage <= 1) return;
-                  updateQueryParams({ page: String(currentPage - 1) });
+                  if (currentPageSafe <= 1) return;
+                  updateQueryParams({ page: String(currentPageSafe - 1) });
                 }}
-                className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+                className={`${currentPageSafe <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
               />
 
-              {/* 當前頁數 抓路由 */}
-              <p>{currentPage}</p>
-
+              <p>{currentPageSafe}</p>
               <p className="mx-4">/</p>
+              <p>{totalPages}</p>
 
-              {/* 總頁數 抓後端給的 */}
-              <p>{pagination.totalPages}</p>
-
-              {/* 下一頁 */}
               <GoChevronRight
                 onClick={() => {
-                  if (currentPage >= pagination.totalPages) return;
-                  updateQueryParams({ page: String(currentPage + 1) });
+                  if (currentPageSafe >= totalPages) return;
+                  updateQueryParams({ page: String(currentPageSafe + 1) });
                 }}
                 className={`${
-                  currentPage >= pagination.totalPages
+                  currentPageSafe >= totalPages
                     ? "opacity-30 pointer-events-none"
                     : ""
                 } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}
@@ -318,7 +336,7 @@ export function Grammars() {
         {/* 【 5 】 文法區 */}
 
         <div className="flex flex-col gap-4 mt-8 mb-20">
-          {grammarsData?.map((grammar) => (
+          {pagedGrammars.map((grammar) => (
             <Link
               to={`/grammar/${grammar.jid}`}
               key={grammar.jid}
@@ -335,34 +353,28 @@ export function Grammars() {
         </div>
 
         {/* 【 6 】 下分頁  */}
-        {pagination.totalPages > 0 && (
+        {totalPages > 1 && (
           <div className="mt-8 mb-24 flex justify-center text-[20px]">
             <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
-              {/* 上一頁 */}
               <GoChevronLeft
                 onClick={() => {
-                  if (currentPage <= 1) return;
-                  updateQueryParams({ page: String(currentPage - 1) });
+                  if (currentPageSafe <= 1) return;
+                  updateQueryParams({ page: String(currentPageSafe - 1) });
                 }}
-                className={`${currentPage <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
+                className={`${currentPageSafe <= 1 ? "opacity-30 pointer-events-none" : ""} text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 mr-10 bg-softPink text-heavyPink`}
               />
 
-              {/* 當前頁數 抓路由 */}
-              <p>{currentPage}</p>
-
+              <p>{currentPageSafe}</p>
               <p className="mx-4">/</p>
+              <p>{totalPages}</p>
 
-              {/* 總頁數 抓後端給的 */}
-              <p>{pagination.totalPages}</p>
-
-              {/* 下一頁 */}
               <GoChevronRight
                 onClick={() => {
-                  if (currentPage >= pagination.totalPages) return;
-                  updateQueryParams({ page: String(currentPage + 1) });
+                  if (currentPageSafe >= totalPages) return;
+                  updateQueryParams({ page: String(currentPageSafe + 1) });
                 }}
                 className={`${
-                  currentPage >= pagination.totalPages
+                  currentPageSafe >= totalPages
                     ? "opacity-30 pointer-events-none"
                     : ""
                 } text-[28px] cursor-pointer rounded-full  w-10 h-10 p-2 ml-10 bg-softPink text-heavyPink`}

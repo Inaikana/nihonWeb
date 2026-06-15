@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchGrammars } from "../api/grammars";
-import type { GrammarQueryParams } from "../types/GrammarParams";
 
-export function useGetGrammars(params: GrammarQueryParams) {
+export function useGetGrammars() {
   return useQuery({
-    queryKey: ["grammars", params],
-    queryFn: () => fetchGrammars(params),
+    queryKey: ["grammars"],
+    queryFn: fetchGrammars,
   });
 }

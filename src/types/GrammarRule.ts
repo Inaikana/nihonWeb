@@ -11,7 +11,7 @@ export interface QuizRule {
 
 export interface GrammarRule {
   jid: string;
-  episodeNumber: string;
+  episodeNumber: string | number;
   order: string;
   timestamp: number;
   grammarPattern: string;
@@ -25,20 +25,4 @@ export interface GrammarRule {
   videoTitle: string;
   tags: string[];
   quizs: QuizRule[];
-}
-
-export interface BackObjRule {
-  success: boolean;
-  grammarsData: GrammarRule[];
-  pagination: {
-    totalItems: number;
-    currentPage: number;
-    totalPages: number;
-    limit: number;
-  };
-}
-
-export interface BackGrammarIdRule {
-  success: boolean;
-  grammar: GrammarRule | null;
 }
